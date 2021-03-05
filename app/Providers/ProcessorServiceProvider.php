@@ -3,11 +3,13 @@
 namespace Rowles\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
 use Rowles\Console\Processors\BaseProcessor;
 use Rowles\Console\Processors\MetadataProcessor;
 use Rowles\Console\Processors\PreviewProcessor;
 use Rowles\Console\Processors\ThumbnailProcessor;
 use Rowles\Console\Processors\TranscodeProcessor;
+
 use Rowles\Console\Interfaces\BaseProcessorInterface;
 use Rowles\Console\Interfaces\PreviewProcessorInterface;
 use Rowles\Console\Interfaces\MetadataProcessorInterface;

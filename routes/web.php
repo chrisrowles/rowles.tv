@@ -16,11 +16,11 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::group(['middleware' => ['auth', 'verified']], function() {
-    Route::get('/', 'VideoController@index')->name('video.index');
-    Route::get('/search', 'VideoController@search')->name('video.search');
-    Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
+Route::get('/', 'VideoController@index')->name('video.index');
+Route::get('/search', 'VideoController@search')->name('video.search');
+Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
 
+Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::group(['prefix' => 'membership'], function() {
         Route::get('/packages', 'Membership\SubscriptionController@index')->name('membership.packages');
     });

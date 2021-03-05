@@ -1,4 +1,4 @@
-<div class="pt-2 bg-dark text-white {{ $classes ?? "" }}">
+<div class="pt-2 {{ $classes ?? "" }}">
     <h2 class="text-lg mb-2">
         <i class="fas fa-star mr-2 text-yellow-400"></i> {{ __('Top Streamers') }}
     </h2>

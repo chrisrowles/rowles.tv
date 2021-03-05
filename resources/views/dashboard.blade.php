@@ -1,8 +1,11 @@
 <x-app-layout>
-    <div class="pt-0 md:pt-6 breadcrumbs">
+    <div class="breadcrumbs">
         {{ Breadcrumbs::render('dashboard') }}
     </div>
-    <div class="py-6">
+    <div class="py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-2xl">{{ __('Video Management') }}</h1>
+    </div>
+    <div class="pb-6">
         <div class="max-w-full mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 items-start md:gap-10" x-data="select()">
                 <div class="h-full md:border-r md:border-gray-300 md:pr-10">

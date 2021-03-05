@@ -10,9 +10,14 @@ class VideoController extends Controller
     /**
      * @return mixed
      */
-    public function index()
+    public function index(Request $request)
     {
-        $videos = Video::paginate(24);
+        $limit = 24;
+        if ($request->get('limit')) {
+            $limit = $request->get('limit');
+        }
+
+        $videos = Video::paginate($limit);
 
         return view('video.index', compact('videos'));
     }
@@ -37,7 +42,7 @@ class VideoController extends Controller
     public function watch($id)
     {
         $video = Video::where('id', $id)->first();
-        $related = Video::limit(6)->get();
+        $related = Video::related($video);
 
         if (!$video) {
             abort(404);

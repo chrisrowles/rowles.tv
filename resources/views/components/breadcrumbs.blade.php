@@ -1,7 +1,7 @@
 @unless ($breadcrumbs->isEmpty())
-    <div class="max-w-full mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-full mx-auto mb-2">
         <div class="bg-gray-200 overflow-hidden shadow-sm">
-            <div class="p-2 bg-dark text-white px-5">
+            <div class="py-2 md:py-4 bg-dark text-white px-4 sm:px-6 lg:px-8">
                 <ol class="breadcrumb flex gap-2">
                     @foreach ($breadcrumbs as $breadcrumb)
 

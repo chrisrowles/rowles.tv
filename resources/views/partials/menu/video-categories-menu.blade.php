@@ -1,4 +1,4 @@
-<div class="pt-2 bg-dark text-white {{ $classes ?? "" }}">
+<div class="pt-2 {{ $classes ?? "" }}">
     <h2 class="text-lg mb-2"><i class="fas fa-list mr-2 text-purple-300"></i>{{ __('Top Games/Categories') }}</h2>
     <hr>
     <div class="text-sm mt-2">

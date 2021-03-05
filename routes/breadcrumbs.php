@@ -3,7 +3,12 @@
 use Rowles\Models\Video;
 
 Breadcrumbs::for('home', function ($trail) {
-    $trail->push('Home', route('video.index'));
+    $motd = '';
+    if (request()->routeIs('video.index')) {
+        $motd = ' / find something to watch :)';
+    }
+
+    $trail->push('Home' . $motd, route('video.index'));
 });
 
 // Home > Watch

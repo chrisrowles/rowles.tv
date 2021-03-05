@@ -29,8 +29,6 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
      */
     public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false): array
     {
-        $ext = $isGif ? '.gif' : '.jpg';
-
         if ($bulkMode) {
             $scan = $this->getVideosFromStorage();
 

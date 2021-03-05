@@ -230,9 +230,7 @@ return [
     ],
 
     'cloudasset' => [
-        's3' => [
-            'thumbnail' => env('AWS_S3_THUMBNAIL_URL'),
-            'video' => env('AWS_S3_VIDEO_URL')
-        ]
+        'image' => env('CLOUDASSET_IMAGE_URL'),
+        'video' => env('CLOUDASSET_VIDEO_URL')
     ]
 ];
