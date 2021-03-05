@@ -15,12 +15,12 @@ class OutputHandler
 
         if ($process['status'] === 'error') {
             if ($process['errors'][$identifier] > 0) {
-                $console->error($process['errors'][$identifier] . ' task failure.');
+                $console->error($process['errors'][$identifier] . ' ' . $identifier . ' tasks failed');
             } else {
-                $console->error('unspecified error.');
+                $console->error('unspecified error');
             }
         } else {
-            $console->success($identifier . ' task success.');
+            $console->success($identifier . ' task success');
         }
     }
 }

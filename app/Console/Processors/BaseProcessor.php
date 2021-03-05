@@ -233,7 +233,13 @@ class BaseProcessor implements BaseProcessorInterface
      */
     public function scanRecursive($path): array
     {
-        $files = [];
+        $files = [
+            'items' => [],
+            'total' => [
+                'files' => 0,
+                'folders' => 0
+            ]
+        ];
 
         if (file_exists($path)) {
 
@@ -245,14 +251,16 @@ class BaseProcessor implements BaseProcessorInterface
                 }
 
                 if (is_dir($path . '/' . $f)) {
-                    $files[] = [
+                    ++$files['total']['folders'];
+                    $files['items'][] = [
                         'name' => $f,
                         'type' => 'folder',
                         'path' => $path . '/' . $f,
                         'items' => $this->scanRecursive($path . '/' . $f)
                     ];
                 } else {
-                    $files[] = [
+                    ++$files['total']['files'];
+                    $files['items'][] = [
                         'name' => $f,
                         'type' => "file",
                         'path' => $path . '/' . $f,

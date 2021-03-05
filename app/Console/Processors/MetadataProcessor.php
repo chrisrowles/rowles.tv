@@ -39,11 +39,20 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     public function execute(string $name = "", bool $bulkMode = false): array
     {
         if ($bulkMode) {
-            $files = $this->getVideosFromStorage();
-            foreach ($files as $file) {
+            $scan = $this->getVideosFromStorage();
+
+            if ($this->console) {
+                $this->console->info($scan['total']['files'] . ' videos to extract metadata from');
+            }
+
+            foreach ($scan['items'] as $file) {
                 $this->ffmpegTask($file['name']);
             }
         } else {
+            if ($this->console) {
+                $this->console->info('extracting metadata from ' . $name);
+            }
+
             $this->ffmpegTask($name);
         }
 
@@ -68,9 +77,6 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
             foreach ($metadata->getFillable() as $attribute) {
                 try {
                     $metadata->{$attribute} = $this->{static::$mappings[$attribute]}($video);
-                    if ($this->console) {
-                        $this->console->success('[' . $name . '] - ' . $attribute . ' extracted');
-                    }
                 } catch(InvalidArgumentException $e) {
                     if ($this->console) {
                         $this->console->error('[' . $name . '] - ' . $e->getMessage());
@@ -82,9 +88,21 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
 
             if ($metadata->save()) {
                 if ($this->console) {
-                    $this->console->success('[' . $name . '] - Metadata record created');
+                    $this->console->success('[' . $name . '] - metadata record created');
                 }
             } else {
+                if ($this->console) {
+                    $this->console->error('[' . $name . '] - failed to save metadata record');
+                }
+
+                ++$this->errors['metadata'];
+            }
+
+        } else {
+            if ($video) {
+                $this->console->info('[' . $name . '] - metadata record already exists.');
+            } else {
+                $this->console->error('[' . $name . '] - video not imported');
                 ++$this->errors['metadata'];
             }
         }

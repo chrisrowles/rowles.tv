@@ -28,14 +28,21 @@ class PreviewProcessor extends BaseProcessor implements PreviewProcessorInterfac
     public function execute(string $name = "", bool $bulkMode = false): array
     {
         if ($bulkMode) {
-            $files = $this->getVideosFromStorage();
-            foreach ($files as $file) {
+            $scan = $this->getVideosFromStorage();
+
+            if ($this->console) {
+                $this->console->info($scan['total']['files'] . ' previews to generate');
+            }
+
+            foreach ($scan['items'] as $file) {
                 $this->ffmpegTask($file['name']);
             }
         } else {
-            if (!file_exists($this->previewStorageDestination($name))) {
-                $this->ffmpegTask($name);
+            if ($this->console) {
+                $this->console->info('generating preview for ' . $name);
             }
+
+            $this->ffmpegTask($name);
         }
 
         if ($this->errors['previews'] > 0) {
@@ -60,7 +67,10 @@ class PreviewProcessor extends BaseProcessor implements PreviewProcessorInterfac
                 $this->console->success('[' . $name . '] preview created');
             }
 
-            $this->updateMetadataAttribute($name, 'preview', $this->previewStorageDestination($name));
+            $this->updateMetadataAttribute($name, [
+                'preview_filepath' => $this->previewStorageDestination($name),
+                'preview_filename' => $name
+            ]);
         } catch (Exception $e) {
             if ($this->console) {
                 $this->console->error('[' . $name . '] ' . $e->getMessage());

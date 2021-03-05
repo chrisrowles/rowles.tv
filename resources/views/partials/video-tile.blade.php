@@ -2,7 +2,7 @@
     <div class="video-tile py-1 px-5 md:px-0">
         <a href="{{ route('video.watch', ['id' => $video->id]) }}">
             <img class="thumbnail-img"
-                 src="{{ asset('/storage/images/jpeg/' . $video->metadata->thumbnail_filename) }}"
+                 src="{{  config('app.cloudasset.s3.thumbnail') . '/jpeg/' . $video->metadata->thumbnail_filename }}"
                  onmouseover="_video.preview(this)"
                  onmouseout="_video.unpreview(this)"
                  alt="Thumbnail">

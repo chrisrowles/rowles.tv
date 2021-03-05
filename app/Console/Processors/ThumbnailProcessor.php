@@ -29,17 +29,24 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
      */
     public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false): array
     {
+        $ext = $isGif ? '.gif' : '.jpg';
+
         if ($bulkMode) {
-            $files = $this->getVideosFromStorage();
-            foreach ($files as $file) {
-                if (!file_exists($this->thumbnailStorageDestination($file['name'], $isGif))) {
-                    $this->ffmpegTask($file['name'], $isGif);
-                }
+            $scan = $this->getVideosFromStorage();
+
+            if ($this->console) {
+                $this->console->info($scan['total']['files'] . ' thumbnails to generate');
+            }
+
+            foreach ($scan['items'] as $file) {
+                $this->ffmpegTask($file['name'], $isGif);
             }
         } else {
-            if (!file_exists($this->thumbnailStorageDestination($name, $isGif))) {
-                $this->ffmpegTask($name, $isGif);
+            if ($this->console) {
+                $this->console->info('generating thumbnail for ' . $name);
             }
+
+            $this->ffmpegTask($name, $isGif);
         }
 
         if ($this->errors['thumbnails'] > 0) {
@@ -73,7 +80,7 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
             }
 
             if ($this->console) {
-                $this->console->success('[' . $name . '] thumbnail created');
+                $this->console->success('[' . $filename . '] thumbnail created');
             }
 
             $this->updateMetadataAttribute($name, [

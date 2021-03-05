@@ -73,7 +73,7 @@ class UploadToS3BucketCommand extends Command
         }
 
         $total = count($files);
-        $count = 0;
+        $idx = 0;
         foreach ($files as $file) {
             try {
                 $this->output->writeln('uploading ' . $file['name'] .
@@ -84,10 +84,10 @@ class UploadToS3BucketCommand extends Command
                 $this->output->error($e->getMessage());
             }
 
-            $count++;
+            $idx++;
         }
 
-        $this->output->writeln('<fg=blue>[info]</> ' . $count . ' of ' . $total . ' files imported');
+        $this->output->writeln('<fg=blue>[info]</> ' . $idx . ' of ' . $total . ' files imported');
 
         return true;
     }

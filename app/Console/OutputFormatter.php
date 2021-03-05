@@ -28,4 +28,8 @@ class OutputFormatter
     public function error (string $input) {
         $this->output->writeln('<fg=red>[error]</> '. $input);
     }
+
+    public function line (string $input) {
+        $this->output->writeln($input);
+    }
 }
