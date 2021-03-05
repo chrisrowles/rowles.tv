@@ -1,0 +1,92 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.card {
+    @apply overflow-hidden shadow-sm
+}
+
+.card-inner {
+    @apply p-4
+}
+
+.form-label {
+    @apply block text-gray-700 text-sm font-bold mb-2
+}
+
+.form-input {
+    @apply shadow appearance-none border py-2 px-3 leading-tight focus:outline-none
+}
+
+.form-textbox {
+    @apply shadow mt-1 block w-full border w-full py-2 px-3 leading-tight focus:outline-none
+}
+
+.default-button {
+    @apply font-bold px-4 focus:outline-none
+}
+
+.success-button {
+    @apply bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 focus:outline-none
+}
+
+.primary-button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 focus:outline-none
+}
+
+.primary-table {
+    @apply table-auto min-w-full divide-y
+}
+
+.primary-table-header {
+    @apply text-left text-xs font-medium text-gray-500 uppercase tracking-wider
+
+}
+
+.overlay {
+    @apply absolute top-0 left-0 right-0 bottom-0;
+}
+
+.font-sans {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.hero-image {
+    background-image: url('/images/sbp1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 600px;
+}
+
+.bg-dark {
+    background-color: #1e1e1e;
+}
+
+.border-dark {
+    color: #1e1e1e;
+}
+
+.max-w-8xl {
+    max-width: 80rem;
+}
+.max-w-9xl {
+    max-width: 90rem;
+}
+.max-w-100xl {
+    max-width: 100rem;
+}
+
+.-letter-space-5 {
+    letter-spacing: -0.15rem;
+}
+
+.thumbnail-text {
+    font-family: 'Arial', sans-serif;
+}
+
+@screen md {
+    .thumbnail-img {
+        width: 350px;
+        height: 150px;
+    }
+}
