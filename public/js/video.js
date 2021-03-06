@@ -47,6 +47,7 @@ video.get = function (route, refs) {
     refs.selectedVideoGenre.value = data.genre;
     refs.selectedVideoDescription.value = data.description;
     var thumbnail = document.getElementById('video-thumbnail');
+    thumbnail.classList.remove('hidden');
 
     if (thumbnail && data.metadata.thumbnail_filename) {
       thumbnail.src = '/storage/images/jpeg/' + data.metadata.thumbnail_filename;

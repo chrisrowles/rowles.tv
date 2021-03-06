@@ -4,7 +4,6 @@ namespace Rowles\Console\Processors;
 
 use Rowles\Models\Video;
 use Rowles\Models\Metadata;
-use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Exception\InvalidArgumentException;
 use Rowles\Console\Interfaces\MetadataProcessorInterface;
 
@@ -34,19 +33,24 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     /**
      * @param string $name
      * @param bool $bulkMode
+     * @param array $recursiveMode
      * @return array
      */
-    public function execute(string $name = "", bool $bulkMode = false): array
+    public function execute(string $name = "", bool $bulkMode = false, $recursiveMode = []): array
     {
         if ($bulkMode) {
-            $scan = $this->getVideosFromStorage();
+            $scan = empty($recursiveMode) ? $this->getVideosFromStorage() : $recursiveMode;
 
-            if ($this->console) {
-                $this->console->info($scan['total']['files'] . ' videos to extract metadata from');
+            if ($this->console && is_integer($scan['total'])) {
+                $this->console->info($scan['total'] . ' videos to extract metadata from');
             }
 
             foreach ($scan['items'] as $file) {
-                $this->ffmpegTask($file['name']);
+                if ($file['type'] === 'folder') {
+                    $this->execute($name,true, $file['items']);
+                } else {
+                    $this->ffmpegTask($file);
+                }
             }
         } else {
             if ($this->console) {
@@ -64,22 +68,23 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     }
 
     /**
-     * @param string $name
+     * @param array|string $item
      * @return void
      */
-    public function ffmpegTask(string $name): void
+    public function ffmpegTask($item): void
     {
-        $video = Video::where('filepath', $this->videoStorageSource($name))->first();
+        $video = is_array($item) ? $item['path'] : $this->videoStorageSource($item);
+        $record = Video::where('filepath', $video)->first();
 
-        if ($video && !Metadata::where('video_id', $video->id)->exists()) {
+        if ($record && !Metadata::where('video_id', $record->id)->exists()) {
             $metadata = new Metadata();
-            $metadata->video_id = $video->id;
+            $metadata->video_id = $record->id;
             foreach ($metadata->getFillable() as $attribute) {
                 try {
-                    $metadata->{$attribute} = $this->{static::$mappings[$attribute]}($video);
+                    $metadata->{$attribute} = $this->{static::$mappings[$attribute]}($record->filepath);
                 } catch(InvalidArgumentException $e) {
                     if ($this->console) {
-                        $this->console->error('[' . $name . '] - ' . $e->getMessage());
+                        $this->console->error('[' . $video . '] - ' . $e->getMessage());
                     }
 
                     ++$this->errors['metadata'];
@@ -88,11 +93,11 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
 
             if ($metadata->save()) {
                 if ($this->console) {
-                    $this->console->success('[' . $name . '] - metadata record created');
+                    $this->console->success('[' . $video . '] - metadata record created');
                 }
             } else {
                 if ($this->console) {
-                    $this->console->error('[' . $name . '] - failed to save metadata record');
+                    $this->console->error('[' . $video . '] - failed to save metadata record');
                 }
 
                 ++$this->errors['metadata'];
@@ -100,43 +105,43 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
 
         } else {
             if ($video) {
-                $this->console->info('[' . $name . '] - metadata record already exists.');
+                $this->console->info('[' . $video . '] - metadata record already exists.');
             } else {
-                $this->console->error('[' . $name . '] - video not imported');
+                $this->console->error('[' . $video . '] - video not imported');
                 ++$this->errors['metadata'];
             }
         }
     }
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return int
      */
-    public function getFileSize(Video $video): int
+    public function getFileSize(string $path): int
     {
-        return (int)filesize($this->videoStorageSource($video->filename));
+        return (int)filesize($path);
     }
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getFormat(Video $video): string
+    public function getFormat(string $path): string
     {
-        return (string)$this->openVideo($this->videoStorageSource($video->filename))
+        return (string)$this->openVideo($path)
             ->getFormat()
             ->get('format_name');
     }
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getCodec(Video $video): string
+    public function getCodec(string $path): string
     {
-        return (string)$this->openVideo($this->videoStorageSource($video->filename))
+        return (string)$this->openVideo($path)
             ->getStreams()
             ->videos()
             ->first()
@@ -144,25 +149,25 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     }
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return int
      * @throws InvalidArgumentException
      */
-    public function getBitrate(Video $video): int
+    public function getBitrate(string $path): int
     {
-        return (int)$this->openVideo($this->videoStorageSource($video->filename))
+        return (int)$this->openVideo($path)
             ->getFormat()
             ->get('bit_rate');
     }
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return float
      * @throws InvalidArgumentException
      */
-    public function getDuration(Video $video): float
+    public function getDuration(string $path): float
     {
-        return (float)$this->openVideo($this->videoStorageSource($video->filename))
+        return (float)$this->openVideo($path)
             ->getStreams()
             ->videos()
             ->first()

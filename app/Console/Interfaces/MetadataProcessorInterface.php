@@ -2,7 +2,6 @@
 
 namespace Rowles\Console\Interfaces;
 
-use Rowles\Models\Video;
 use FFMpeg\Exception\InvalidArgumentException;
 
 interface MetadataProcessorInterface extends BaseProcessorInterface
@@ -10,46 +9,47 @@ interface MetadataProcessorInterface extends BaseProcessorInterface
     /**
      * @param string $name
      * @param bool $bulkMode
+     * @param bool|array $recursiveMode
      * @return array
      */
-    public function execute(string $name = "", bool $bulkMode = false): array;
+    public function execute(string $name = "", bool $bulkMode = false, array $recursiveMode = []): array;
 
     /**
-     * @param string $name
+     * @param mixed $item
      */
-    public function ffmpegTask(string $name): void;
+    public function ffmpegTask(string $item): void;
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return int
      */
-    public function getFileSize(Video $video): int;
+    public function getFileSize(string $path): int;
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getFormat(Video $video): string;
+    public function getFormat(string $path): string;
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getCodec(Video $video): string;
+    public function getCodec(string $path): string;
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return int
      * @throws InvalidArgumentException
      */
-    public function getBitrate(Video $video): int;
+    public function getBitrate(string $path): int;
 
     /**
-     * @param Video $video
+     * @param string $path
      * @return float
      * @throws InvalidArgumentException
      */
-    public function getDuration(Video $video): float;
+    public function getDuration(string $path): float;
 }

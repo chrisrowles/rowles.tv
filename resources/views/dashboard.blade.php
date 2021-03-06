@@ -32,7 +32,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @include('partials.form.video-details-form')
                         <div class="pt-7">
-                            <img class="w-full" src=""
+                            <img class="w-full hidden" src=""
                                  onmouseover="_video.preview(this)"
                                  onmouseout="_video.unpreview(this)"
                                  alt="Thumbnail"

@@ -8,7 +8,6 @@ use FFMpeg\Format\Video\WebM;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Console\OutputStyle;
 use FFMpeg\Format\Video\DefaultVideo;
-use Rowles\Console\Processors\BaseProcessor;
 use FFMpeg\Exception\InvalidArgumentException;
 
 interface BaseProcessorInterface
@@ -111,6 +110,12 @@ interface BaseProcessorInterface
      * @return array
      */
     public function scanRecursive($path): array;
+
+    /**
+     * @param $scan
+     * @param $count
+     */
+    public function numberOfFiles($scan, &$count): void;
 
     /**
      * @param string $file

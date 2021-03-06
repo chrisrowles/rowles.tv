@@ -46,24 +46,39 @@ class ImportVideosCommand extends Command
             $scan = $processor->scanRecursive($this->argument('path'));
         }
 
-        $this->output->writeln('<fg=blue>[info]</> ' . $scan['total']['files'] . ' videos to import');
+        $this->output->writeln('<fg=blue>[info]</> ' . $scan['total'] . ' videos to import');
 
         $idx = 0;
-        foreach ($scan['items'] as $item) {
-            if ($item['type'] === 'folder') {
-                continue;
-            }
-
-            $this->process($processor, $item, $idx);
-        }
+        $this->processRecursive($processor, $scan, $idx);
 
         if ($idx === 0) {
             $this->output->writeln('<fg=yellow>[info]</> No videos imported.');
         } else {
-            $this->output->writeln('<fg=blue>[info]</> ' . $idx . '/' . $scan['total']['files'] . ' videos imported.');
+            $this->output->writeln('<fg=blue>[info]</> ' . $idx . '/' . $scan['total'] . ' videos imported.');
         }
     }
 
+    /**
+     * @param $scan
+     * @param BaseProcessorInterface $processor
+     * @param int $idx
+     */
+    private function processRecursive(BaseProcessorInterface $processor, array $scan, int &$idx)
+    {
+        foreach ($scan['items'] as $file) {
+            if ($file['type'] === 'folder') {
+                $this->processRecursive($processor, $file['items'], $idx);
+            } else {
+                $this->process($processor, $file, $idx);
+            }
+        }
+    }
+
+    /**
+     * @param BaseProcessorInterface $processor
+     * @param array $file
+     * @param int $idx
+     */
     private function process(BaseProcessorInterface $processor, array $file, int &$idx): void
     {
         if ($file['type'] === 'file' && $processor->extAllowed($file['name'])) {
@@ -71,6 +86,7 @@ class ImportVideosCommand extends Command
                 $video = new Video;
                 $video->filepath = $file['path'];
                 $video->filename = $file['name'];
+                $video->title = $file['name'];
 
                 if (!$video->save()) {
                     $this->output->writeln('<fg=red>[error]</> failed to save record for ' . $file['path']);

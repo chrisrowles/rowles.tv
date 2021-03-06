@@ -166,7 +166,12 @@ class BaseProcessor implements BaseProcessorInterface
      */
     public function getVideosFromStorage(string $name = ""): array
     {
-        return $this->scanRecursive($this->videoStorageSource($name));
+        $videos = $this->scanRecursive($this->videoStorageSource($name));
+
+        $videos['total'] = 0;
+        $this->numberOfFiles($videos, $videos['total']);
+
+        return $videos;
     }
 
     /**
@@ -271,6 +276,20 @@ class BaseProcessor implements BaseProcessorInterface
         }
 
         return $files;
+    }
+
+    /**
+     * @param $scan
+     * @param $count
+     */
+    public function numberOfFiles($scan, &$count): void
+    {
+        foreach ($scan['items'] as $item) {
+            if ($item['type'] === 'folder') {
+                $count += $item['items']['total']['files'];
+                $this->numberOfFiles($item['items'], $count);
+            }
+        }
     }
 
     /**
