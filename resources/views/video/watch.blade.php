@@ -9,7 +9,7 @@
                 @include('partials.video-genre-pills', ['classes' => 'border-purple-900 bg-purple-900 text-white md:text-sm'])
             </div>
             <div class="pt-6">
-                @include('partials.video-player', ['file' => config('app.cloudasset.video') . '/test/' . $video->filename])
+                @include('partials.video-player', ['file' => config('app.cloudasset.video') . '/' . $video->filename])
             </div>
             <div class="pt-6">
                 <h2 class="text-3xl mb-4 px-5 md:px-0">{{ __('Related Videos') }}</h2>

@@ -45,6 +45,15 @@ class Video extends Model
 {
     use HasFactory;
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('default_sort', function (Builder $qb) {
+            $qb->orderBy('title');
+        });
+    }
+
     /**
      * One-to-one relation to metadata
      *

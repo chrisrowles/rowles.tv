@@ -26,6 +26,8 @@ class BaseProcessor implements BaseProcessorInterface
     protected $console = false;
 
     /**
+     * BaseProcessor Constructor.
+     *
      * @param mixed $console
      */
     public function __construct($console = false)
@@ -228,7 +230,7 @@ class BaseProcessor implements BaseProcessorInterface
     public function updateMetadataAttribute(string $file, array $attributes): void
     {
         Metadata::whereHas('video', function($q) use ($file) {
-            return $q->where('filepath', '=', $this->videoStorageSource($file));
+            return $q->where('filepath', '=', $file);
         })->update($attributes);
     }
 
@@ -247,7 +249,6 @@ class BaseProcessor implements BaseProcessorInterface
         ];
 
         if (file_exists($path)) {
-
             foreach (scandir($path) as $f) {
                 $path = substr($path, -1) === '/' ? substr($path, 0, -1) : $path;
 

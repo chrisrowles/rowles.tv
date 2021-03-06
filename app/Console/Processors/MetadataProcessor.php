@@ -12,7 +12,11 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     /** @var array $errors */
     protected array $errors = ['metadata' => 0];
 
-    /** @var array $mappings */
+    /**
+     * Map Metadata model properties to MetadataProcessor methods.
+     *
+     * @var array $mappings
+     */
     protected static array $mappings = [
         'filesize' => 'getFilesize',
         'format' => 'getFormat',
@@ -22,7 +26,8 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     ];
 
     /**
-     * PreviewProcessor constructor.
+     * MetadataProcessor constructor.
+     *
      * @param bool $console
      */
     public function __construct($console = false)
@@ -31,6 +36,16 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     }
 
     /**
+     * Recursive method to extract video metadata.
+     *
+     * Single
+     * Simply passes the filename to fetch from app storage.
+     *
+     * Bulk Mode
+     * $recursiveMode will be empty upon first scan, if folders are found during the first scan, this method is
+     * called again with $recursiveMode populated with the folders items, this process repeats until no more
+     * sub-folders are left.
+     *
      * @param string $name
      * @param bool $bulkMode
      * @param array $recursiveMode
@@ -68,6 +83,8 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
     }
 
     /**
+     * FFMPEG processing task to extract metadata.
+     *
      * @param array|string $item
      * @return void
      */

@@ -7,12 +7,13 @@ interface PreviewProcessorInterface extends BaseProcessorInterface
     /**
      * @param string $name
      * @param bool $bulkMode
+     * @param array $recursiveMode
      * @return array
      */
-    public function execute(string $name = "", bool $bulkMode = false): array;
+    public function execute(string $name = "", bool $bulkMode = false, array $recursiveMode = []): array;
 
     /**
-     * @param string $name
+     * @param array|string $item
      */
-    public function ffmpegTask(string $name): void;
+    public function ffmpegTask($item): void;
 }

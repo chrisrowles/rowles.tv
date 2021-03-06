@@ -3,7 +3,6 @@
 namespace Rowles\Console\Processors;
 
 use Exception;
-USE Rowles\Models\Metadata;
 use FFMpeg\Coordinate\{Dimension, TimeCode};
 use Rowles\Console\Interfaces\ThumbnailProcessorInterface;
 
@@ -14,6 +13,7 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
 
     /**
      * ThumbnailProcessor constructor.
+     *
      * @param bool $console
      */
     public function __construct($console = false)
@@ -22,22 +22,37 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
     }
 
     /**
+     * Recursive method to generate video thumbnails.
+     *
+     * Single
+     * Simply passes the filename to fetch from app storage.
+     *
+     * Bulk Mode
+     * $recursiveMode will be empty upon first scan, if folders are found during the first scan, this method is
+     * called again with $recursiveMode populated with the folders items, this process repeats until no more
+     * sub-folders are left.
+     *
      * @param string $name
      * @param bool $isGif
      * @param bool $bulkMode
+     * @param array $recursiveMode
      * @return array
      */
-    public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false): array
+    public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false, array $recursiveMode = []): array
     {
         if ($bulkMode) {
-            $scan = $this->getVideosFromStorage();
+            $scan = empty($recursiveMode) ? $this->getVideosFromStorage() : $recursiveMode;
 
-            if ($this->console) {
-                $this->console->info($scan['total']['files'] . ' thumbnails to generate');
+            if ($this->console && is_integer($scan['total'])) {
+                $this->console->info($scan['total'] . ' thumbnails to generate');
             }
 
             foreach ($scan['items'] as $file) {
-                $this->ffmpegTask($file['name'], $isGif);
+                if ($file['type'] === 'folder') {
+                    $this->execute($name, $isGif, $bulkMode, $file['items']);
+                } else {
+                    $this->ffmpegTask($file, $isGif);
+                }
             }
         } else {
             if ($this->console) {
@@ -55,24 +70,32 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
     }
 
     /**
-     * @param string $name
+     * FFMPEG processing task to generate thumbnails.
+     *
+     * @param array|string $item
      * @param bool $isGif
      */
-    public function ffmpegTask(string $name, bool $isGif): void
+    public function ffmpegTask($item, bool $isGif): void
     {
+        $video = is_array($item) ? $item['path'] : $this->videoStorageSource($item);
+
         try {
             if ($isGif) {
-                $filename = $name.'.gif';
+                $filename = is_array($item) ? $item['name'] : $item;
+                $filename .= '.gif';
+
                 $storageDestination = $this->thumbnailStorageDestination($filename, $isGif);
 
-                $this->openVideo($this->videoStorageSource($name))
+                $this->openVideo($video)
                     ->gif(TimeCode::fromSeconds($this->start), new Dimension(500, 250), $this->seconds)
                     ->save($storageDestination);
             } else {
-                $filename = $name.'.jpg';
+                $filename = is_array($item) ? $item['name'] : $item;
+                $filename .= '.jpg';
+
                 $storageDestination = $this->thumbnailStorageDestination($filename, $isGif);
 
-                $this->openVideo($this->videoStorageSource($name))
+                $this->openVideo($video)
                     ->frame(TimeCode::fromSeconds($this->start))
                     ->save($storageDestination);
             }
@@ -81,13 +104,13 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
                 $this->console->success('[' . $filename . '] thumbnail created');
             }
 
-            $this->updateMetadataAttribute($name, [
+            $this->updateMetadataAttribute($video, [
                 'thumbnail_filepath' => $this->thumbnailStorageDestination($filename, $isGif),
                 'thumbnail_filename' => $filename
             ]);
         } catch (Exception $e) {
             if ($this->console) {
-                $this->console->error('[' . $name . '] ' . $e->getMessage());
+                $this->console->error('[' . $video . '] ' . $e->getMessage());
             }
 
             ++$this->errors['thumbnails'];
