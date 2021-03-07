@@ -1,7 +1,7 @@
 @if(isset($video))
     <div class="flex flex-col video-tile py-1 px-5 md:px-0">
         <a href="{{ route('video.watch', ['id' => $video->id]) }}">
-            <div class="preview" onmouseover="_video.preview(this)" onmouseout="_video.unpreview(this)">
+            <div class="preview" onmouseenter="_video.preview(this)" onmouseleave="_video.unpreview(this)">
                 <img src="{{  config('app.cloudasset.image') . '/jpeg/' . $video->metadata->thumbnail_filename }}"
                      alt="Thumbnail" class="media">
             </div>

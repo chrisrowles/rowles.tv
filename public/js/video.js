@@ -137,15 +137,29 @@ video.update = function (route, refs) {
 };
 
 video.preview = function (el) {
+  // Lazy load previews
   var thumbnail = el.querySelector('img');
 
   if (thumbnail) {
-    var preview = document.createElement('video');
-    preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
-    preview.loop = true;
-    preview.muted = true;
-    preview.play().then()["catch"](function () {});
-    el.replaceChild(preview, thumbnail);
+    thumbnail.classList.add('hidden');
+    var preview = el.querySelector('video');
+
+    if (preview) {
+      preview.classList.remove('hidden');
+    } else {
+      preview = document.createElement('video');
+      preview.classList.add('media');
+      preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
+      preview.loop = true;
+      preview.muted = true;
+      el.appendChild(preview, thumbnail);
+    }
+
+    var isPlaying = preview.currentTime > 0 && !preview.paused && !preview.ended && preview.readyState > preview.HAVE_CURRENT_DATA;
+
+    if (!isPlaying) {
+      preview.play().then()["catch"](function () {});
+    }
   }
 };
 
@@ -153,9 +167,14 @@ video.unpreview = function (el) {
   var preview = el.querySelector('video');
 
   if (preview) {
-    var thumbnail = document.createElement('img');
-    thumbnail.src = preview.src.replace("/previews", "/images/jpeg") + '.jpg';
-    el.replaceChild(thumbnail, preview);
+    preview.pause();
+    preview.currentTime = 0;
+    preview.classList.add('hidden');
+    var thumbnail = el.querySelector('img');
+
+    if (thumbnail) {
+      thumbnail.classList.remove('hidden');
+    }
   }
 };
 

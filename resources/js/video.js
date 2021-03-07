@@ -135,27 +135,44 @@ video.update = (route, refs) => {
         .catch(e => console.log(e));
 }
 
-
 video.preview = el => {
+    // Lazy load previews
     let thumbnail = el.querySelector('img');
     if (thumbnail) {
-        let preview = document.createElement('video');
-        preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
-        preview.loop = true;
-        preview.muted = true;
-        preview.play().then().catch(()=>{});
+        thumbnail.classList.add('hidden');
+        let preview = el.querySelector('video');
+        if (preview) {
+            preview.classList.remove('hidden');
+        } else {
+            preview = document.createElement('video');
+            preview.classList.add('media');
+            preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
+            preview.loop = true;
+            preview.muted = true;
 
-        el.replaceChild(preview, thumbnail);
+            el.appendChild(preview, thumbnail);
+        }
+
+        let isPlaying = preview.currentTime > 0 && !preview.paused && !preview.ended
+            && preview.readyState > preview.HAVE_CURRENT_DATA;
+
+        if (!isPlaying) {
+            preview.play().then().catch(()=>{});
+        }
     }
 }
 
 video.unpreview = el => {
     let preview = el.querySelector('video');
     if (preview) {
-        let thumbnail = document.createElement('img');
-        thumbnail.src = preview.src.replace("/previews", "/images/jpeg") + '.jpg';
+        preview.pause();
+        preview.currentTime = 0;
+        preview.classList.add('hidden');
 
-        el.replaceChild(thumbnail, preview);
+        let thumbnail = el.querySelector('img');
+        if (thumbnail) {
+            thumbnail.classList.remove('hidden');
+        }
     }
 }
 
