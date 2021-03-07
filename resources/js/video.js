@@ -6,8 +6,6 @@ let headers = {
     "X-Requested-With": "XMLHttpRequest"
 }
 
-video.isPlaying = false;
-
 video.setup = path => {
     jwplayer('video-container').setup({
         'playlist': [{
@@ -137,61 +135,28 @@ video.update = (route, refs) => {
         .catch(e => console.log(e));
 }
 
-video.play = el => {
-    if (el.paused && !video.isPlaying) {
-        el.play();
-    }
-
-    video.isPlaying = true;
-}
-
-video.stop = el => {
-    if (!el.paused && video.isPlaying) {
-        el.pause();
-    }
-}
 
 video.preview = el => {
-    // Lazy Loading (causes flickers)
-    // let thumbnail = el.querySelector('img');
-    //
-    // if (thumbnail) {
-    //     let video = document.createElement('video');
-    //     video.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
-    //     video.autoplay = true;
-    //     video.loop = true;
-    //
-    //     el.replaceChild(video, thumbnail);
-    // }
-
-    let preview = el.querySelector('video');
-    preview.classList.remove("hidden");
-    video.play(preview);
-
     let thumbnail = el.querySelector('img');
-    thumbnail.classList.add('hidden');
+    if (thumbnail) {
+        let preview = document.createElement('video');
+        preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
+        preview.loop = true;
+        preview.muted = true;
+        preview.play().then().catch(()=>{});
+
+        el.replaceChild(preview, thumbnail);
+    }
 }
 
 video.unpreview = el => {
-    // Lazy Loading (causes flickers)
-    // let thumbnail = el.querySelector('video');
-    //
-    // if (thumbnail) {
-    //     let image = document.createElement('img');
-    //     image.src = thumbnail.src.replace("/previews", "/images/jpeg") + '.jpg';
-    //
-    //     el.replaceChild(image, thumbnail);
-    // }
-
-    video.isPlaying = false;
-
     let preview = el.querySelector('video');
-    preview.currentTime = 0;
-    preview.classList.add('hidden');
-    video.stop(preview);
+    if (preview) {
+        let thumbnail = document.createElement('img');
+        thumbnail.src = preview.src.replace("/previews", "/images/jpeg") + '.jpg';
 
-    let thumbnail = el.querySelector('img');
-    thumbnail.classList.remove("hidden");
+        el.replaceChild(thumbnail, preview);
+    }
 }
 
 video.resetFormFields = () => {

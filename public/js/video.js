@@ -21,7 +21,6 @@ var headers = {
   "Accept": "application/json",
   "X-Requested-With": "XMLHttpRequest"
 };
-video.isPlaying = false;
 
 video.setup = function (path) {
   jwplayer('video-container').setup({
@@ -137,56 +136,27 @@ video.update = function (route, refs) {
   });
 };
 
-video.play = function (el) {
-  if (el.paused && !video.isPlaying) {
-    el.play();
-  }
-
-  video.isPlaying = true;
-};
-
-video.stop = function (el) {
-  if (!el.paused && video.isPlaying) {
-    el.pause();
-  }
-};
-
 video.preview = function (el) {
-  // Lazy Loading (causes flickers)
-  // let thumbnail = el.querySelector('img');
-  //
-  // if (thumbnail) {
-  //     let video = document.createElement('video');
-  //     video.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
-  //     video.autoplay = true;
-  //     video.loop = true;
-  //
-  //     el.replaceChild(video, thumbnail);
-  // }
-  var preview = el.querySelector('video');
-  preview.classList.remove("hidden");
-  video.play(preview);
   var thumbnail = el.querySelector('img');
-  thumbnail.classList.add('hidden');
+
+  if (thumbnail) {
+    var preview = document.createElement('video');
+    preview.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
+    preview.loop = true;
+    preview.muted = true;
+    preview.play().then()["catch"](function () {});
+    el.replaceChild(preview, thumbnail);
+  }
 };
 
 video.unpreview = function (el) {
-  // Lazy Loading (causes flickers)
-  // let thumbnail = el.querySelector('video');
-  //
-  // if (thumbnail) {
-  //     let image = document.createElement('img');
-  //     image.src = thumbnail.src.replace("/previews", "/images/jpeg") + '.jpg';
-  //
-  //     el.replaceChild(image, thumbnail);
-  // }
-  video.isPlaying = false;
   var preview = el.querySelector('video');
-  preview.currentTime = 0;
-  preview.classList.add('hidden');
-  video.stop(preview);
-  var thumbnail = el.querySelector('img');
-  thumbnail.classList.remove("hidden");
+
+  if (preview) {
+    var thumbnail = document.createElement('img');
+    thumbnail.src = preview.src.replace("/previews", "/images/jpeg") + '.jpg';
+    el.replaceChild(thumbnail, preview);
+  }
 };
 
 video.resetFormFields = function () {

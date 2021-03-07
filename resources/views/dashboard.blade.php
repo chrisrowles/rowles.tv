@@ -33,8 +33,6 @@
                         @include('partials.form.video-details-form')
                         <div class="pt-7">
                             <img class="w-full hidden" src=""
-                                 onmouseover="_video.preview(this)"
-                                 onmouseout="_video.unpreview(this)"
                                  alt="Thumbnail"
                                  id="video-thumbnail">
                             @include('partials.video-attributes-table')
