@@ -74,11 +74,9 @@ class TranscodeVideoCommand extends Command
         }
 
         try {
-            $process = $processor->execute(
-                $this->argument('name'),
-                $this->option('ext'),
-                $this->mapFormattingConfig()
-            );
+            $processor->mapOptions($this->options());
+
+            $process = $processor->execute($this->argument('name'), $this->option('ext'));
 
             OutputHandler::handle($process, $this->output, $this->identifier);
         } catch (\Exception $e) {

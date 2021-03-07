@@ -106,11 +106,10 @@ interface BaseProcessorInterface
     public function updateMetadataAttribute(string $file, array $attributes): void;
 
     /**
-     * @param $path
-     * @param array $extDisallowed
+     * @param mixed $path
      * @return array
      */
-    public function scanRecursive($path, array $extDisallowed): array;
+    public function scanRecursive($path): array;
 
     /**
      * @param $scan

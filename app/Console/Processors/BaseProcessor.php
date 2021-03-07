@@ -245,17 +245,16 @@ class BaseProcessor implements BaseProcessorInterface
      */
     public function updateMetadataAttribute(string $file, array $attributes): void
     {
-        Metadata::whereHas('video', function($q) use ($file) {
+        Metadata::whereHas('video', function ($q) use ($file) {
             return $q->where('filepath', '=', $file);
         })->update($attributes);
     }
 
     /**
      * @param $path
-     * @param array $extDisallowed
      * @return array
      */
-    public function scanRecursive($path, array $extDisallowed = []): array
+    public function scanRecursive($path): array
     {
         $files = [
             'items' => [],
@@ -282,17 +281,14 @@ class BaseProcessor implements BaseProcessorInterface
                         'items' => $this->scanRecursive($path . '/' . $f)
                     ];
                 } else {
-                    $ext = pathinfo($f, PATHINFO_EXTENSION);
-                    if (!in_array($ext, $extDisallowed)) {
-                        ++$files['total']['files'];
-                        $files['items'][] = [
-                            'name' => $f,
-                            'type' => "file",
-                            'path' => $path . '/' . $f,
-                            'extension' => $ext,
-                            'size' => filesize($path . '/' . $f),
-                        ];
-                    }
+                    ++$files['total']['files'];
+                    $files['items'][] = [
+                        'name' => $f,
+                        'type' => "file",
+                        'path' => $path . '/' . $f,
+                        'extension' => pathinfo($f, PATHINFO_EXTENSION),
+                        'size' => filesize($path . '/' . $f),
+                    ];
                 }
             }
         }

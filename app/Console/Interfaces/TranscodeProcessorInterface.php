@@ -9,20 +9,18 @@ interface TranscodeProcessorInterface extends BaseProcessorInterface
     /**
      * @param mixed $name
      * @param mixed $ext
-     * @param array $opts
      * @param array $recursiveData
      * @return array
-     *  @throws Exception
+     * @throws Exception
      */
-    public function execute($name = null, $ext = null, array $opts = [], array $recursiveData = []): array;
+    public function execute($name = null, $ext = null, array $recursiveData = []): array;
 
     /**
      * @param mixed $item
      * @param string $ext
-     * @param array $opts
      * @return void
      */
-    public function ffmpegTask($item, string $ext, array $opts) : void;
+    public function ffmpegTask($item, string $ext) : void;
 
     /**
      * @param int $kiloBitrate
@@ -47,4 +45,10 @@ interface TranscodeProcessorInterface extends BaseProcessorInterface
      * @return self
      */
     public function setConstantRateFactor(int $constantRateFactor): self;
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function mapOptions(array $options): self;
 }

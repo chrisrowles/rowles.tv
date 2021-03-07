@@ -25,6 +25,8 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
     /** @var int $constantRateFactor */
     protected int $constantRateFactor = 20;
 
+    protected array $options;
+
     /**
      * TranscodeProcessor constructor.
      *
@@ -32,6 +34,20 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
      */
     public function __construct($console = false)
     {
+        $this->options = [
+            'bulk' => false,
+            'clip' => [
+                'enable' => false,
+                'from' => 40,
+                'to' => 5
+            ],
+            'resize' => [
+                'enable' => false,
+                'width' => 500,
+                'height' => 250
+            ]
+        ];
+
         parent::__construct($console);
     }
 
@@ -51,17 +67,16 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
      *
      * @param mixed $name
      * @param mixed $ext
-     * @param array $opts
      * @param array $recursiveData
      * @return array
      * @throws Exception
      */
-    public function execute($name = null, $ext = null, array $opts = [], array $recursiveData = []): array
+    public function execute($name = null, $ext = null, array $recursiveData = []): array
     {
         // Disallow directory traversal
         if (substr($name, 0, 2) === '..') return ['status' => 'error', 'errors' => ['transcode' => 1]];
 
-        if (!$name && $opts['bulk']) {
+        if (!$name && $this->options['bulk']) {
             // Scan video storage, unless we already have and we're processing files in folders recursively.
             $scan = empty($recursiveData) ? $this->getVideosFromStorage() : $recursiveData;
 
@@ -72,16 +87,16 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
             foreach ($scan['items'] as $file) {
                 if ($file['type'] === 'folder') {
                     // If we've found a folder, then repeat this process with the folder's items.
-                    $this->execute($name, $ext, $opts, $file['items']);
+                    $this->execute($name, $ext, $file['items']);
                 } else {
                     // If we've found a file, then run the transcoding task.
-                    $this->ffmpegTask($file, $ext ?? $file['extension'], $opts);
+                    $this->ffmpegTask($file, $ext ?? $file['extension']);
                 }
             }
-        } elseif ($name && !$opts['bulk']) {
-            $this->ffmpegTask($name, $ext ?? pathinfo($name)['extension'], $opts);
+        } elseif ($name && !$this->options['bulk']) {
+            $this->ffmpegTask($name, $ext ?? pathinfo($name)['extension']);
         } else {
-            Log::error(var_export(['process' => 'transcode', 'filename' => $name, 'options' => $opts]));
+            Log::error(var_export(['process' => 'transcode', 'filename' => $name, 'options' => $this->options]));
             throw new Exception('You must provide valid options, please check the logs for more information.');
         }
 
@@ -97,10 +112,9 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
      *
      * @param mixed $item
      * @param string $ext
-     * @param array $opts
      * @return void
      */
-    public function ffmpegTask($item, string $ext, array $opts) : void
+    public function ffmpegTask($item, string $ext) : void
     {
         if (is_array($item) && isset($item['path'])) {
             // If we're bulk processing, then pass the bulk processing format
@@ -117,26 +131,27 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
                 $this->console->info('transcoding ' . $video . ' to ' . $ext);
             }
 
-            if ($opts['clip']['enable']) {
-                $from = isset($opts['clip']['from']) ? $opts['clip']['from'] : 45;
-                $to = isset($opts['clip']['to']) ? $opts['clip']['to'] : 10;
-
+            if ($this->options['clip']['enable']) {
                 if ($this->console) {
-                    $this->console->info('clip at ' . gmdate('H:i:s', $from) . ' for ' . $to . ' seconds');
+                    $this->console->info('clip at ' . gmdate('H:i:s', $this->options['clip']['from']) .
+                        ' for ' . $this->options['clip']['to'] . ' seconds');
                 }
 
-                $media->filters()->clip(TimeCode::fromSeconds($from), TimeCode::fromSeconds($to));
+                $media->filters()->clip(
+                    TimeCode::fromSeconds($this->options['clip']['from']),
+                    TimeCode::fromSeconds($this->options['clip']['to'])
+                );
             }
 
-            if (isset($opts['resize'])) {
-                $width = isset($opts['resize']['width']) ? $opts['resize']['width'] : 500;
-                $height = isset($opts['resize']['height']) ? $opts['resize']['height'] : 250;
-
+            if ($this->options['resize']['enable']) {
                 if ($this->console) {
-                    $this->console->info('resize to ' . $width . 'x' . $height);
+                    $this->console->info('resize to ' . $this->options['resize']['width'] . 'x' .
+                        $this->options['resize']['height']);
                 }
 
-                $media->filters()->resize(new Dimension($width, $height));
+                $media->filters()->resize(
+                    new Dimension($this->options['resize']['width'], $this->options['resize']['height'])
+                );
             }
 
             $format = $this->getNewFormat($ext);
@@ -168,6 +183,27 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
 
             ++$this->errors['videos'];
         }
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function mapOptions(array $options) : self
+    {
+        foreach($options as $key => $option) {
+            if (isset($this->options[$key])) {
+                if (is_array($this->options[$key])) {
+                    foreach($this->options[$key] as $k=>$v) {
+                        $this->options[$key][$k] = $k === 'enable' ?  $options[$key] : $options[$k];
+                    }
+                } else {
+                    $this->options[$key] = $option;
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**
