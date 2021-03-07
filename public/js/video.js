@@ -21,6 +21,7 @@ var headers = {
   "Accept": "application/json",
   "X-Requested-With": "XMLHttpRequest"
 };
+video.isPlaying = false;
 
 video.setup = function (path) {
   jwplayer('video-container').setup({
@@ -136,6 +137,20 @@ video.update = function (route, refs) {
   });
 };
 
+video.play = function (el) {
+  if (el.paused && !video.isPlaying) {
+    el.play();
+  }
+
+  video.isPlaying = true;
+};
+
+video.stop = function (el) {
+  if (!el.paused && video.isPlaying) {
+    el.pause();
+  }
+};
+
 video.preview = function (el) {
   // Lazy Loading (causes flickers)
   // let thumbnail = el.querySelector('img');
@@ -149,8 +164,8 @@ video.preview = function (el) {
   //     el.replaceChild(video, thumbnail);
   // }
   var preview = el.querySelector('video');
-  preview.play();
   preview.classList.remove("hidden");
+  video.play(preview);
   var thumbnail = el.querySelector('img');
   thumbnail.classList.add('hidden');
 };
@@ -165,12 +180,13 @@ video.unpreview = function (el) {
   //
   //     el.replaceChild(image, thumbnail);
   // }
+  video.isPlaying = false;
+  var preview = el.querySelector('video');
+  preview.currentTime = 0;
+  preview.classList.add('hidden');
+  video.stop(preview);
   var thumbnail = el.querySelector('img');
   thumbnail.classList.remove("hidden");
-  var preview = el.querySelector('video');
-  preview.classList.add('hidden');
-  preview.pause();
-  preview.currentTime = 0;
 };
 
 video.resetFormFields = function () {

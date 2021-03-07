@@ -6,6 +6,8 @@ let headers = {
     "X-Requested-With": "XMLHttpRequest"
 }
 
+video.isPlaying = false;
+
 video.setup = path => {
     jwplayer('video-container').setup({
         'playlist': [{
@@ -135,6 +137,20 @@ video.update = (route, refs) => {
         .catch(e => console.log(e));
 }
 
+video.play = el => {
+    if (el.paused && !video.isPlaying) {
+        el.play();
+    }
+
+    video.isPlaying = true;
+}
+
+video.stop = el => {
+    if (!el.paused && video.isPlaying) {
+        el.pause();
+    }
+}
+
 video.preview = el => {
     // Lazy Loading (causes flickers)
     // let thumbnail = el.querySelector('img');
@@ -149,9 +165,8 @@ video.preview = el => {
     // }
 
     let preview = el.querySelector('video');
-    preview.play();
-    preview.classList.remove("hidden")
-
+    preview.classList.remove("hidden");
+    video.play(preview);
 
     let thumbnail = el.querySelector('img');
     thumbnail.classList.add('hidden');
@@ -168,13 +183,15 @@ video.unpreview = el => {
     //     el.replaceChild(image, thumbnail);
     // }
 
-    let thumbnail = el.querySelector('img');
-    thumbnail.classList.remove("hidden");
+    video.isPlaying = false;
 
     let preview = el.querySelector('video');
-    preview.classList.add('hidden');
-    preview.pause();
     preview.currentTime = 0;
+    preview.classList.add('hidden');
+    video.stop(preview);
+
+    let thumbnail = el.querySelector('img');
+    thumbnail.classList.remove("hidden");
 }
 
 video.resetFormFields = () => {
