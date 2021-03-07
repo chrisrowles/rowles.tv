@@ -25,6 +25,9 @@ class BaseProcessor implements BaseProcessorInterface
     /** @var mixed $console */
     protected $console = false;
 
+    /** @var array  */
+    protected array $options;
+
     /**
      * BaseProcessor Constructor.
      *
@@ -216,6 +219,33 @@ class BaseProcessor implements BaseProcessorInterface
         }
 
         return config('storage.video.destination') . '/' . $path;
+    }
+
+    /**
+     * Map options, overriding any defaults where needed.
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function mapOptions(array $options) : self
+    {
+        foreach($options as $key => $option) {
+            if (isset($this->options[$key])) {
+                if (is_array($this->options[$key])) {
+                    foreach($this->options[$key] as $k=>$v) {
+                        if ($k === 'enable') {
+                            $this->options[$key][$k] = $options[$key];
+                        } else {
+                            $this->options[$key][$k] = isset($options[$k]) ? $options[$k] : $v;
+                        }
+                    }
+                } else {
+                    $this->options[$key] = $option ?? $this->options[$key];
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

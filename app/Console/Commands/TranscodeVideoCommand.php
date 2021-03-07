@@ -20,7 +20,7 @@ class TranscodeVideoCommand extends Command
         {--b|bulk : Transcode videos in bulk mode}
         {--c|clip : Enable clip}
         {--from= : Clip from seconds}
-        {--to= : Clip to seconds}
+        {--duration= : Clip duration}
         {--r|resize : Enable resize}
         {--width= : Resize width}
         {--height= : Resize height}
@@ -55,26 +55,8 @@ class TranscodeVideoCommand extends Command
      */
     public function handle(TranscodeProcessorInterface $processor): void
     {
-        $processor->setConsole($this->output);
-
-        if ($this->option('bitrate')) {
-            $processor->setKiloBitrate($this->option('bitrate'));
-        }
-
-        if ($this->option('audio-bitrate')) {
-            $processor->setAudioKiloBitrate($this->option('audio-bitrate'));
-        }
-
-        if ($this->option('audio-channels')) {
-            $processor->setAudioChannels($this->option('audio-channels'));
-        }
-
-        if ($this->option('constant-rate-factor')) {
-            $processor->setConstantRateFactor($this->option('constant-rate-factor'));
-        }
-
         try {
-            $processor->mapOptions($this->options());
+            $processor->setConsole($this->output)->mapOptions($this->options());
 
             $process = $processor->execute($this->argument('name'), $this->option('ext'));
 
@@ -82,25 +64,5 @@ class TranscodeVideoCommand extends Command
         } catch (\Exception $e) {
             $this->output->error($e->getMessage());
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function mapFormattingConfig(): array
-    {
-        return [
-            'bulk' => $this->option('bulk'),
-            'clip' => [
-                'enable' => $this->option('clip'),
-                'from' => $this->option('from'),
-                'to' => $this->option('to')
-            ],
-            'resize' => [
-                'enable' => $this->option('resize'),
-                'width' => $this->option('width'),
-                'height' => $this->option('height')
-            ]
-        ];
     }
 }

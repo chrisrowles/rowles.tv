@@ -17,10 +17,10 @@ class GenerateThumbnailCommand extends Command
      * @var mixed
      */
     protected $signature = 'vid:thumbnail {name? : Optional filename}
-        {--g|gif : Render thumbnails in GIF format}
-        {--b|bulk : Generate thumbnails in bulk mode}
-        {--start= : Starting point for thumbnails}
-        {--seconds= : Number of seconds to capture for gif thumbnails}';
+        {--b|bulk : Bulk mode}
+        {--g|gif : Generate GIFs}
+        {--from= : Generate frame from time}
+        {--duration= : Number of seconds to capture for gif thumbnails}';
 
     /**
      * The console command description.
@@ -47,21 +47,9 @@ class GenerateThumbnailCommand extends Command
      */
     public function handle(ThumbnailProcessorInterface $processor): void
     {
-        $processor->setConsole($this->output);
+        $processor->setConsole($this->output)->mapOptions($this->options());
 
-        if ($this->option('start')) {
-            $processor->setStart($this->option('start'));
-        }
-
-        if ($this->option('seconds')) {
-            $processor->setSeconds($this->option('seconds'));
-        }
-
-        $process = $processor->execute(
-            $this->argument('name') ?? "",
-            $this->option('gif'),
-            $this->option('bulk')
-        );
+        $process = $processor->execute($this->argument('name'));
 
         OutputHandler::handle($process, $this->output, $this->identifier);
     }

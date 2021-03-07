@@ -2,21 +2,21 @@
 
 namespace Rowles\Console\Interfaces;
 
+use Exception;
+
 interface ThumbnailProcessorInterface extends BaseProcessorInterface
 {
     /**
-     * @param string $name
-     * @param bool $isGif
-     * @param bool $bulkMode
-     * @param array $recursiveMode
+     * @param mixed $name
+     * @param array $recursiveData
      * @return array
+     * @throws Exception
      */
-    public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false, array $recursiveMode = []): array;
+    public function execute($name = null, array $recursiveData = []): array;
 
     /**
-     * @param array|string $item
-     * @param bool $isGif
-     * @return mixed
+     * @param mixed $item
+     * @return void
      */
-    public function ffmpegTask($item, bool $isGif);
+    public function ffmpegTask($item): void;
 }

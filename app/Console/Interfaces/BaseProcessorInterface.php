@@ -94,6 +94,12 @@ interface BaseProcessorInterface
     public function videoStorageDestination(string $path): string;
 
     /**
+     * @param array $options
+     * @return $this
+     */
+    public function mapOptions(array $options): self;
+
+    /**
      * @param string $ext
      * @return WebM|WMV|X264
      */

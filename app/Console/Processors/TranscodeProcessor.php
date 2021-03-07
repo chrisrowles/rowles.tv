@@ -10,21 +10,10 @@ use Rowles\Console\Interfaces\TranscodeProcessorInterface;
 
 class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInterface
 {
-    /** @var array $errors */
+    /** @var array */
     protected array $errors = ['videos' => 0];
 
-    /** @var int $kiloBitrate */
-    protected int $kiloBitrate = 1000;
-
-    /** @var int $audioChannels */
-    protected int $audioChannels = 2;
-
-    /** @var int $audioKiloBitrate */
-    protected int $audioKiloBitrate = 256;
-
-    /** @var int $constantRateFactor */
-    protected int $constantRateFactor = 20;
-
+    /** @var array  */
     protected array $options;
 
     /**
@@ -39,13 +28,17 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
             'clip' => [
                 'enable' => false,
                 'from' => 40,
-                'to' => 5
+                'duration' => 5
             ],
             'resize' => [
                 'enable' => false,
                 'width' => 500,
                 'height' => 250
-            ]
+            ],
+            'bitrate' => 1000,
+            'audio-bitrate' => 256,
+            'audio-channels' => 2,
+            'constant-rate-factor' => 20
         ];
 
         parent::__construct($console);
@@ -86,10 +79,10 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
 
             foreach ($scan['items'] as $file) {
                 if ($file['type'] === 'folder') {
-                    // If we've found a folder, then repeat this process with the folder's items.
+                    // If we have found a folder, then repeat this process with the folder's items.
                     $this->execute($name, $ext, $file['items']);
                 } else {
-                    // If we've found a file, then run the transcoding task.
+                    // If we have found a file, then run the transcoding task.
                     $this->ffmpegTask($file, $ext ?? $file['extension']);
                 }
             }
@@ -117,7 +110,7 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
     public function ffmpegTask($item, string $ext) : void
     {
         if (is_array($item) && isset($item['path'])) {
-            // If we're bulk processing, then pass the bulk processing format
+            // If we are bulk processing, then pass the bulk processing format
             $video = $item['path'];
         } else {
             // Otherwise just fetch the single file
@@ -134,12 +127,12 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
             if ($this->options['clip']['enable']) {
                 if ($this->console) {
                     $this->console->info('clip at ' . gmdate('H:i:s', $this->options['clip']['from']) .
-                        ' for ' . $this->options['clip']['to'] . ' seconds');
+                        ' for ' . $this->options['clip']['duration'] . ' seconds');
                 }
 
                 $media->filters()->clip(
                     TimeCode::fromSeconds($this->options['clip']['from']),
-                    TimeCode::fromSeconds($this->options['clip']['to'])
+                    TimeCode::fromSeconds($this->options['clip']['duration'])
                 );
             }
 
@@ -168,11 +161,11 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
                 });
             }
 
-            $format->setKiloBitrate($this->kiloBitrate)
-                ->setAudioChannels($this->audioChannels)
-                ->setAudioKiloBitrate($this->audioKiloBitrate);
+            $format->setKiloBitrate($this->options['bitrate'])
+                ->setAudioChannels($this->options['audio-channels'])
+                ->setAudioKiloBitrate($this->options['audio-bitrate']);
 
-            $format->setAdditionalParameters(['-crf', $this->constantRateFactor]);
+            $format->setAdditionalParameters(['-crf', $this->options['constant-rate-factor']]);
             $filename = $this->videoStorageDestination(pathinfo($video)['filename']) . '.' . $ext;
 
             $media->save($format, $filename);
@@ -183,66 +176,5 @@ class TranscodeProcessor extends BaseProcessor implements TranscodeProcessorInte
 
             ++$this->errors['videos'];
         }
-    }
-
-    /**
-     * @param array $options
-     * @return $this
-     */
-    public function mapOptions(array $options) : self
-    {
-        foreach($options as $key => $option) {
-            if (isset($this->options[$key])) {
-                if (is_array($this->options[$key])) {
-                    foreach($this->options[$key] as $k=>$v) {
-                        $this->options[$key][$k] = $k === 'enable' ?  $options[$key] : $options[$k];
-                    }
-                } else {
-                    $this->options[$key] = $option;
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param int $kiloBitrate
-     * @return self
-     */
-    public function setKiloBitrate(int $kiloBitrate): self
-    {
-        $this->kiloBitrate = $kiloBitrate;
-        return $this;
-    }
-
-    /**
-     * @param int $audioChannels
-     * @return self
-     */
-    public function setAudioChannels(int $audioChannels): self
-    {
-        $this->audioChannels = $audioChannels;
-        return $this;
-    }
-
-    /**
-     * @param int $audioKiloBitrate
-     * @return self
-     */
-    public function setAudioKiloBitrate(int $audioKiloBitrate): self
-    {
-        $this->audioKiloBitrate = $audioKiloBitrate;
-        return $this;
-    }
-
-    /**
-     * @param int $constantRateFactor
-     * @return self
-     */
-    public function setConstantRateFactor(int $constantRateFactor): self
-    {
-        $this->constantRateFactor = $constantRateFactor;
-        return $this;
     }
 }
