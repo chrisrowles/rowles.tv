@@ -2,30 +2,27 @@
 
 namespace Rowles\Console\Processors;
 
+use Log;
 use Exception;
 use FFMpeg\FFMpeg;
 use FFMpeg\Media\Video;
-use Illuminate\Console\OutputStyle;
-use Log;
+use Rowles\Models\Metadata;
 use Rowles\Console\OutputFormatter;
+use Illuminate\Console\OutputStyle;
 use FFMpeg\Exception\InvalidArgumentException;
 use Rowles\Console\Interfaces\BaseProcessorInterface;
 use FFMpeg\Format\Video\{DefaultVideo, X264, WMV, WebM};
-use Rowles\Models\Metadata;
 
 class BaseProcessor implements BaseProcessorInterface
 {
     /** @var FFMpeg $ffmpeg */
     protected FFMpeg $ffmpeg;
 
-    /** @var int $start */
-    protected int $start = 10;
-
-    /** @var int $seconds */
-    protected int $seconds = 10;
-
     /** @var mixed $console */
     protected $console = false;
+
+    /** @var array */
+    protected array $errors;
 
     /** @var array  */
     protected array $options;
@@ -53,7 +50,7 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * Recursive method to transcode videos.
+     * Execute processing task.
      *
      * Single
      * Accepts either an absolute filepath to the video, or a relative filepath which will instead be appended to env
@@ -83,7 +80,7 @@ class BaseProcessor implements BaseProcessorInterface
             $scan = empty($recursiveData) ? $this->getVideosFromStorage() : $recursiveData;
 
             if ($this->console && is_integer($scan['total'])) {
-                $this->console->info($scan['total'] . ' videos to transcode');
+                $this->console->info($scan['total'] . ' videos to process.');
             }
 
             foreach ($scan['items'] as $file) {
@@ -117,26 +114,6 @@ class BaseProcessor implements BaseProcessorInterface
     public function setConsole(OutputStyle $console): self
     {
         $this->console = new OutputFormatter($console);
-        return $this;
-    }
-
-    /**
-     * @param int $value
-     * @return $this
-     */
-    public function setStart(int $value): self
-    {
-        $this->start = $value;
-        return $this;
-    }
-
-    /**
-     * @param int $value
-     * @return $this
-     */
-    public function setSeconds(int $value): self
-    {
-        $this->seconds = $value;
         return $this;
     }
 
@@ -229,12 +206,6 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * Recursively scans for videos at a location depending on whether a relative path or an absolute path is passed.
-     *
-     * For example, if $name = "/home/user/videos", then the recursive scan will be performed in that location, if
-     * $name = "videos" and VIDEO_STORAGE_SOURCE is set to "/mnt/d/media", then the recursive scan will be performed in
-     * "/mnt/d/media/videos/"
-     *
      * @param string $path
      * @return array
      */
@@ -249,11 +220,6 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * Returns a path to the video depending on whether a relative path or an absolute path is passed.
-     *
-     * For example, if $name = "/home/user/videos/video.mp4", then that file will be returned, if $name = "video.mp4"
-     * and VIDEO_STORAGE_SOURCE is set to "/mnt/d/media", then "/mnt/d/media/video.mp4" will be returned.
-     *
      * @param string $path
      * @return string
      */
@@ -267,11 +233,6 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * Returns a path to the video storage destination depending on whether a relative or absolute path is passed.
-     *
-     * For example, if $name = "/home/user/videos/video.mp4", then that destination will be returned, if $name = "video.mp4"
-     * and VIDEO_STORAGE_DESTINATION is set to "/mnt/d/transcoded", then "/mnt/d/transcoded/video.mp4" will be returned.
-     *
      * @param string $path
      * @return string
      */
@@ -285,8 +246,6 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * Map options, overriding any defaults where needed.
-     *
      * @param array $options
      * @return $this
      */

@@ -66,7 +66,7 @@ class ThumbnailProcessor extends BaseProcessor implements ProcessingTaskInterfac
                 $storageDestination = $this->thumbnailStorageDestination($filename, true);
                 $media->gif(
                     TimeCode::fromSeconds($this->options['from']),
-                    new Dimension($this->options['resize']['width'], $this->options['resize']['height']),
+                    new Dimension(500, 250),
                     $this->options['gif']['duration']
                 )->save($storageDestination);
             } else {

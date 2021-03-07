@@ -28,18 +28,6 @@ interface BaseProcessorInterface
     public function setConsole(OutputStyle $console): self;
 
     /**
-     * @param int $value
-     * @return $this
-     */
-    public function setStart(int $value): self;
-
-    /**
-     * @param int $value
-     * @return $this
-     */
-    public function setSeconds(int $value): self;
-
-    /**
      * @param string $name
      * @return Video
      * @throws InvalidArgumentException

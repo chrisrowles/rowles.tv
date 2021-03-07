@@ -3,26 +3,13 @@
 namespace Rowles\Http\Controllers\Api;
 
 use Rowles\Models\Video;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Rowles\Http\Controllers\Controller;
 use Rowles\Http\Requests\UpdateVideoRequest;
-use Rowles\Console\Interfaces\BaseProcessorInterface;
+
 
 class VideoController extends Controller
 {
-    /** @var BaseProcessorInterface  */
-    protected BaseProcessorInterface $processor;
-
-    /**
-     * VideoController constructor.
-     * @param BaseProcessorInterface $processor
-     */
-    public function __construct(BaseProcessorInterface $processor)
-    {
-       $this->processor = $processor;
-    }
-
     /**
      * @return JsonResponse
      */
