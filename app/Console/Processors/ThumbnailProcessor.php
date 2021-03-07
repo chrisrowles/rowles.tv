@@ -25,9 +25,9 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
     {
         $this->options = [
             'bulk' => false,
+            'from' => 40,
             'gif' => [
                 'enable' => false,
-                'from' => 40,
                 'duration' => 5
             ]
         ];
@@ -118,14 +118,14 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
                 $filename .= '.gif';
                 $storageDestination = $this->thumbnailStorageDestination($filename, true);
                 $media->gif(
-                    TimeCode::fromSeconds($this->options['gif']['from']),
+                    TimeCode::fromSeconds($this->options['from']),
                     new Dimension($this->options['resize']['width'], $this->options['resize']['height']),
                     $this->options['gif']['duration']
                 )->save($storageDestination);
             } else {
                 $filename .= '.jpg';
                 $storageDestination = $this->thumbnailStorageDestination($filename);
-                $media->frame(TimeCode::fromSeconds($this->options['gif']['from']))->save($storageDestination);
+                $media->frame(TimeCode::fromSeconds($this->options['from']))->save($storageDestination);
             }
 
             if ($this->console) {
