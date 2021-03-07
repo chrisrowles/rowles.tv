@@ -3,7 +3,10 @@
         <a href="{{ route('video.watch', ['id' => $video->id]) }}">
             <div class="preview" onmouseover="_video.preview(this)" onmouseout="_video.unpreview(this)">
                 <img src="{{  config('app.cloudasset.image') . '/jpeg/' . $video->metadata->thumbnail_filename }}"
-                     alt="Thumbnail">
+                     alt="Thumbnail" class="media">
+                <video src="{{  config('app.cloudasset.preview') . '/' . $video->metadata->preview_filename }}"
+                       loop muted="muted"
+                       class="media hidden"></video>
             </div>
             <div class="mt-2 flex justify-between">
                 <p class="font-bold thumbnail-text">{{ $video->title ?? "No Title" }}</p>

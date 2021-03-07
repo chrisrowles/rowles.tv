@@ -231,6 +231,7 @@ return [
 
     'cloudasset' => [
         'image' => env('CLOUDASSET_IMAGE_URL'),
+        'preview' => env('CLOUDASSET_PREVIEW_URL'),
         'video' => env('CLOUDASSET_VIDEO_URL')
     ]
 ];
