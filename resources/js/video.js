@@ -136,11 +136,27 @@ video.update = (route, refs) => {
 }
 
 video.preview = el => {
-    el.src = el.src.replace("/images/jpeg/", "/images/gif/").replace(".jpg", ".gif");
+    let thumbnail = el.querySelector('img');
+
+    if (thumbnail) {
+        let video = document.createElement('video');
+        video.src = thumbnail.src.replace("/images/jpeg", "/previews").replace(".jpg", "");
+        video.autoplay = true;
+        video.loop = true;
+
+        el.replaceChild(video, thumbnail);
+    }
 }
 
 video.unpreview = el => {
-    el.src = el.src.replace("/images/gif/", "/images/jpeg/").replace(".gif", ".jpg");
+    let thumbnail = el.querySelector('video');
+
+    if (thumbnail) {
+        let image = document.createElement('img');
+        image.src = thumbnail.src.replace("/previews", "/images/jpeg") + '.jpg';
+
+        el.replaceChild(image, thumbnail);
+    }
 }
 
 video.resetFormFields = () => {

@@ -112,16 +112,21 @@ class TranscodeProcessor extends BaseProcessor implements ProcessingTaskInterfac
             $format->setKiloBitrate((int)$this->options['bitrate'])
                 ->setAudioChannels((int)$this->options['audio-channels'])
                 ->setAudioKiloBitrate((int)$this->options['audio-bitrate']);
-
             $format->setAdditionalParameters(['-crf', (int)$this->options['constant-rate-factor']]);
-            $filename = $this->videoStorageDestination(pathinfo($video)['filename']) . '.' . $ext;
 
-            $media->save($format, $filename);
+            if ($this->options['is-preview']) {
+                $filepath = $this->previewStorageDestination(pathinfo($video)['filename']);
+            } else {
+                $filepath = $this->videoStorageDestination(pathinfo($video)['filename']);
+            }
+
+            $filepath .= '.' . $ext;
+            $media->save($format, $filepath);
 
             if ($this->options['is-preview']) {
                 $this->updateMetadataAttribute($video, [
-                    'preview_filepath' => $this->videoStorageDestination(""),
-                    'preview_filename' => pathinfo($video)['filename']
+                    'preview_filepath' => $this->previewStorageDestination(""),
+                    'preview_filename' => pathinfo($video)['filename'] . '.' . $ext
                 ]);
             }
         } catch (Exception $e) {

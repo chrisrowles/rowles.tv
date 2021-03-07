@@ -49,9 +49,9 @@ class Video extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('default_sort', function (Builder $qb) {
-            $qb->orderBy('title');
-        });
+//        static::addGlobalScope('default_sort', function (Builder $qb) {
+//            $qb->orderBy('title');
+//        });
     }
 
     /**

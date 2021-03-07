@@ -14,12 +14,12 @@ use FFMpeg\Exception\InvalidArgumentException;
 interface BaseProcessorInterface
 {
     /**
-     * @param mixed $name
+     * @param mixed $path
      * @param array $recursiveData
      * @return array
      * @throws Exception
      */
-    public function execute($name = null, array $recursiveData = []): array;
+    public function execute($path = null, array $recursiveData = []): array;
 
     /**
      * @param OutputStyle $console
@@ -28,11 +28,11 @@ interface BaseProcessorInterface
     public function setConsole(OutputStyle $console): self;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return Video
      * @throws InvalidArgumentException
      */
-    public function openVideo(string $name): Video;
+    public function openVideo(string $path): Video;
 
     /**
      * @param string $path

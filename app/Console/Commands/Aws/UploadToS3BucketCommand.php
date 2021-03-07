@@ -3,24 +3,20 @@
 namespace Rowles\Console\Commands\Aws;
 
 use File;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Storage;
 use Illuminate\Console\Command;
-use Rowles\Console\OutputHandler;
 use Rowles\Console\Interfaces\BaseProcessorInterface;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class UploadToS3BucketCommand extends Command
 {
-    /** @var string  */
-    protected string $identifier = 's3-uploads';
-
     /**
      * The name and signature of the console command.
      *
      * @var mixed
      */
     protected $signature = 'aws:s3:upload {type? : thumbnails, previews or videos}
-        {--g|gif : Upload GIFs } {--path= : Path for multiple videos}';
+        {--g|gif : Upload thumbnail GIFs instead of JPEGs }';
 
     /**
      * The console command description.
@@ -28,9 +24,6 @@ class UploadToS3BucketCommand extends Command
      * @var mixed
      */
     protected $description = 'Upload objects from local app storage to S3';
-
-    /** @var array  */
-    private array $process;
 
     /**
      * Create a new command instance.
@@ -50,13 +43,11 @@ class UploadToS3BucketCommand extends Command
      */
     public function handle(BaseProcessorInterface $processor): bool
     {
-        $processor->setConsole($this->output);
-
         if ($this->argument('type') === 'thumbnails') {
             $files = $processor->scanRecursive(
                 $processor->thumbnailStorageDestination("", $this->option('gif'))
             );
-            $dest = $this->option('gif') ? 'thumbnails/gif/' : 'thumbnails/jpeg/';
+            $dest = $this->option('gif') ? 'images/gif/' : 'images/jpeg/';
         } elseif ($this->argument('type') === 'previews') {
             $files = $processor->scanRecursive(
                 $processor->previewStorageDestination("")
@@ -74,7 +65,7 @@ class UploadToS3BucketCommand extends Command
 
         $total = count($files);
         $idx = 0;
-        foreach ($files as $file) {
+        foreach ($files['items'] as $file) {
             try {
                 $this->output->writeln('uploading ' . $file['name'] .
                     ' to s3://'. config('filesystems.disks.s3.bucket') .'/' . $dest);

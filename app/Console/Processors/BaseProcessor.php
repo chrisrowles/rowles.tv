@@ -52,30 +52,28 @@ class BaseProcessor implements BaseProcessorInterface
     /**
      * Execute processing task.
      *
-     * Single
-     * Accepts either an absolute filepath to the video, or a relative filepath which will instead be appended to env
-     * VIDEO_STORAGE_SOURCE, for example, passing "/home/user/videos/video1.mp4" will trigger processing for that video,
-     * whereas passing "media/video1.mp4" with VIDEO_STORAGE_SOURCE set to "/mnt/d/" will trigger processing for the
-     * video "/mnt/d/media/video1.mp4"
+     * Single mode accepts $path as either an absolute filepath to the video, or a relative filepath which will instead
+     * be appended to env VIDEO_STORAGE_SOURCE, for example, passing "/home/user/videos/video1.mp4" will trigger
+     * processing for that video, whereas passing "media/video1.mp4" with VIDEO_STORAGE_SOURCE set to "/mnt/d/" will
+     * trigger processing for the video "/mnt/d/media/video1.mp4"
      *
-     * Bulk Mode
-     * Uses env VIDEO_STORAGE_SOURCE which can be set before the command is executed. $recursiveMode will be empty
-     * upon first scan, if folders are found during the first scan, this method is called again with $recursiveMode
-     * populated with the folders items, this process repeats until no more sub-folders are left.
+     * Bulk Mode uses env VIDEO_STORAGE_SOURCE which can be set before the command is executed. $recursiveMode will be
+     * empty upon first scan, if folders are found during the first scan, this method is called again with
+     * $recursiveMode populated with the folders items, this process repeats until no more sub-folders are left.
      *
-     * @param mixed $name
+     * @param mixed $path
      * @param array $recursiveData
      * @return array
      * @throws Exception
      */
-    public function execute($name = null, array $recursiveData = []): array
+    public function execute($path = null, array $recursiveData = []): array
     {
         // Disallow directory traversal
-        if (substr($name, 0, 2) === '..') {
+        if (substr($path, 0, 2) === '..') {
             throw new Exception('Directory traversal is not allowed.');
         }
 
-        if (!$name && $this->options['bulk']) {
+        if (!$path && $this->options['bulk']) {
             // Scan video storage, unless we already have and we're processing files in folders recursively.
             $scan = empty($recursiveData) ? $this->getVideosFromStorage() : $recursiveData;
 
@@ -86,16 +84,16 @@ class BaseProcessor implements BaseProcessorInterface
             foreach ($scan['items'] as $file) {
                 if ($file['type'] === 'folder') {
                     // If we have found a folder, then repeat this process with the folder's items.
-                    $this->execute($name, $file['items']);
+                    $this->execute($path, $file['items']);
                 } else {
                     // If we have found a file, then run the transcoding task.
                     $this->ffmpegTask($file);
                 }
             }
-        } elseif ($name && !$this->options['bulk']) {
-            $this->ffmpegTask($name);
+        } elseif ($path && !$this->options['bulk']) {
+            $this->ffmpegTask($path);
         } else {
-            Log::error(var_export(['process' => $this->identifier, 'filename' => $name, 'options' => $this->options]));
+            Log::error(var_export(['process' => $this->identifier, 'filename' => $path, 'options' => $this->options]));
             throw new Exception('You must provide valid options, please check the logs for more information.');
         }
 
@@ -118,13 +116,13 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @return Video
      * @throws InvalidArgumentException
      */
-    public function openVideo(string $name): Video
+    public function openVideo(string $path): Video
     {
-        return $this->ffmpeg->open($name);
+        return $this->ffmpeg->open($path);
     }
 
     /**
