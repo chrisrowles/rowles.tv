@@ -63,6 +63,8 @@ For example, if you want to transcode a single video from mp4 to mkv:
 php artisan vid:transcode /path/to/video.mp4 --ext=mkv
 ```
 
+Output:
+
 ```
 [info] transcoding path/to/video.mp4 to mkv
 [info] 0% complete
@@ -89,6 +91,8 @@ For example:
 php artisan vid:transcode /path/to/video.mp4 --ext=mkv --clip --from=40 --to=10
 ```
 
+Output:
+
 ```
 [info] transcoding /path/to/video.mp4 to mkv
 [info] clip at 00:00:40 for 5 seconds
@@ -112,6 +116,8 @@ For example:
 php artisan vid:transcode /path/to/video.mp4 --ext=mkv --resize --width=350 --height=200
 ```
 
+Output:
+
 ```
 [info] transcoding /path/to/video.mp4 to mkv
 [info] resize to 350x200
@@ -124,11 +130,15 @@ php artisan vid:transcode /path/to/video.mp4 --ext=mkv --resize --width=350 --he
 If you want to bulk process a directory of videos (_note: this will scan your folder and all sub-folders recursively._)
 
 ```sh
-php artisan vid:transcode --bulk --ext=mkv
+php artisan vid:transcode --bulk /path/to/videos --ext=mkv
 ```
 
-Stringing it all together:
+Output:
 
-```sh
-php artisan vid:transcode --bulk --clip --from=360 --to=120 --resize --width=600 --height=300 --bitrate=200 --audio-channels=0 --audio-bitrate=0
+```
+[info] 421 videos to transcode
+[info] transcoding /path/to/videos/video1.mp4 to mkv
+[info] 0% complete
+[info] 15% complete
+...
 ```
