@@ -101,7 +101,7 @@ Output:
 ...
 ```
 
-#### Resize
+### Resize
 
 If you want to resize your video, pass the following options:
 ```
@@ -126,7 +126,7 @@ Output:
 ...
 ```
 
-#### Bulk Processing
+### Bulk Processing
 If you want to bulk process a directory of videos (_note: this will scan your folder and all sub-folders recursively._)
 
 ```sh
@@ -136,7 +136,7 @@ php artisan vid:transcode --bulk /path/to/videos --ext=mkv
 Output:
 
 ```
-[info] 421 videos to transcode
+[info] 20 videos to transcode
 [info] transcoding /path/to/videos/video1.mp4 to mkv
 [info] 0% complete
 [info] 15% complete
