@@ -2,9 +2,10 @@
 
 namespace Rowles\Console\Commands;
 
-use Rowles\Console\Interfaces\TranscodeProcessorInterface;
+use Exception;
 use Illuminate\Console\Command;
 use Rowles\Console\OutputHandler;
+use Rowles\Console\Processors\TranscodeProcessor;
 
 class TranscodeVideoCommand extends Command
 {
@@ -50,18 +51,18 @@ class TranscodeVideoCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param TranscodeProcessorInterface $processor
+     * @param TranscodeProcessor $processor
      * @return void
      */
-    public function handle(TranscodeProcessorInterface $processor): void
+    public function handle(TranscodeProcessor $processor): void
     {
         try {
             $processor->setConsole($this->output)->mapOptions($this->options());
 
-            $process = $processor->execute($this->argument('name'), $this->option('ext'));
+            $process = $processor->execute($this->argument('name'));
 
-            OutputHandler::handle($process, $this->output, $this->identifier);
-        } catch (\Exception $e) {
+            OutputHandler::handle($process, $this->output, $processor->identifier);
+        } catch (Exception $e) {
             $this->output->error($e->getMessage());
         }
     }

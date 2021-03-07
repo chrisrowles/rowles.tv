@@ -2,15 +2,13 @@
 
 namespace Rowles\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
-use Rowles\Console\Interfaces\MetadataProcessorInterface;
 use Rowles\Console\OutputHandler;
+use Rowles\Console\Processors\MetadataProcessor;
 
 class ExtractMetadataCommand extends Command
 {
-    /** @var string  */
-    protected string $identifier = 'metadata';
-
     /**
      * The name and signature of the console command.
      *
@@ -39,18 +37,19 @@ class ExtractMetadataCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param MetadataProcessorInterface $processor
+     * @param MetadataProcessor $processor
      * @return void
      */
-    public function handle(MetadataProcessorInterface $processor): void
+    public function handle(MetadataProcessor $processor): void
     {
-        $processor->setConsole($this->output);
+        try {
+            $processor->setConsole($this->output)->mapOptions($this->options());
 
-        $process = $processor->execute(
-            $this->argument('name') ?? "",
-            $this->option('bulk')
-        );
+            $process = $processor->execute($this->argument('name'));
 
-        OutputHandler::handle($process, $this->output, $this->identifier);
+            OutputHandler::handle($process, $this->output, $processor->identifier);
+        } catch (Exception $e) {
+            $this->output->error($e->getMessage());
+        }
     }
 }

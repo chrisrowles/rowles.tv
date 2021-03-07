@@ -29,20 +29,16 @@ class ProcessorServiceProvider extends ServiceProvider
             return new BaseProcessor();
         });
 
-        $this->app->bind(TranscodeProcessorInterface::class, function() {
+        $this->app->bind('transcode-processor', function() {
             return new TranscodeProcessor();
+        });
+
+        $this->app->bind('thumbnail-processor', function () {
+            return new ThumbnailProcessor();
         });
 
         $this->app->bind(MetadataProcessorInterface::class, function() {
             return new MetadataProcessor();
-        });
-
-        $this->app->bind(ThumbnailProcessorInterface::class, function () {
-            return new ThumbnailProcessor();
-        });
-
-        $this->app->bind(PreviewProcessorInterface::class, function () {
-            return new PreviewProcessor();
         });
     }
 

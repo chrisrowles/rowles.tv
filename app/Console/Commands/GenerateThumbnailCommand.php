@@ -2,15 +2,13 @@
 
 namespace Rowles\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
-use Rowles\Console\Interfaces\ThumbnailProcessorInterface;
 use Rowles\Console\OutputHandler;
+use Rowles\Console\Processors\ThumbnailProcessor;
 
 class GenerateThumbnailCommand extends Command
 {
-    /** @var string  */
-    protected string $identifier = 'thumbnails';
-
     /**
      * The name and signature of the console command.
      *
@@ -42,15 +40,19 @@ class GenerateThumbnailCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param ThumbnailProcessorInterface $processor
+     * @param ThumbnailProcessor $processor
      * @return void
      */
-    public function handle(ThumbnailProcessorInterface $processor): void
+    public function handle(ThumbnailProcessor $processor): void
     {
-        $processor->setConsole($this->output)->mapOptions($this->options());
+        try {
+            $processor->setConsole($this->output)->mapOptions($this->options());
 
-        $process = $processor->execute($this->argument('name'));
+            $process = $processor->execute($this->argument('name'));
 
-        OutputHandler::handle($process, $this->output, $this->identifier);
+            OutputHandler::handle($process, $this->output, $processor->identifier);
+        } catch (Exception $e) {
+            $this->output->error($e->getMessage());
+        }
     }
 }

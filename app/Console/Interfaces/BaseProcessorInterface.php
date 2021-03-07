@@ -2,6 +2,7 @@
 
 namespace Rowles\Console\Interfaces;
 
+use Exception;
 use FFMpeg\Media\Video;
 use FFMpeg\Format\Video\WMV;
 use FFMpeg\Format\Video\WebM;
@@ -12,6 +13,14 @@ use FFMpeg\Exception\InvalidArgumentException;
 
 interface BaseProcessorInterface
 {
+    /**
+     * @param mixed $name
+     * @param array $recursiveData
+     * @return array
+     * @throws Exception
+     */
+    public function execute($name = null, array $recursiveData = []): array;
+
     /**
      * @param OutputStyle $console
      * @return $this

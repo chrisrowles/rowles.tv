@@ -5,16 +5,20 @@ namespace Rowles\Console\Processors;
 use Rowles\Models\Video;
 use Rowles\Models\Metadata;
 use FFMpeg\Exception\InvalidArgumentException;
-use Rowles\Console\Interfaces\MetadataProcessorInterface;
+use Rowles\Console\Interfaces\ProcessingTaskInterface;
 
-class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterface
+class MetadataProcessor extends BaseProcessor implements ProcessingTaskInterface
 {
     /** @var array $errors */
     protected array $errors = ['metadata' => 0];
 
+    /** @var array  */
+    protected array $options;
+
+    /** @var string  */
+    public string $identifier = 'metadata';
+
     /**
-     * Map Metadata model properties to MetadataProcessor methods.
-     *
      * @var array $mappings
      */
     protected static array $mappings = [
@@ -32,54 +36,11 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
      */
     public function __construct($console = false)
     {
+        $this->options = [
+            'bulk' => false
+        ];
+
         parent::__construct($console);
-    }
-
-    /**
-     * Recursive method to extract video metadata.
-     *
-     * Single
-     * Simply passes the filename to fetch from app storage.
-     *
-     * Bulk Mode
-     * $recursiveMode will be empty upon first scan, if folders are found during the first scan, this method is
-     * called again with $recursiveMode populated with the folders items, this process repeats until no more
-     * sub-folders are left.
-     *
-     * @param string $name
-     * @param bool $bulkMode
-     * @param array $recursiveMode
-     * @return array
-     */
-    public function execute(string $name = "", bool $bulkMode = false, $recursiveMode = []): array
-    {
-        if ($bulkMode) {
-            $scan = empty($recursiveMode) ? $this->getVideosFromStorage() : $recursiveMode;
-
-            if ($this->console && is_integer($scan['total'])) {
-                $this->console->info($scan['total'] . ' videos to extract metadata from');
-            }
-
-            foreach ($scan['items'] as $file) {
-                if ($file['type'] === 'folder') {
-                    $this->execute($name,true, $file['items']);
-                } else {
-                    $this->ffmpegTask($file);
-                }
-            }
-        } else {
-            if ($this->console) {
-                $this->console->info('extracting metadata from ' . $name);
-            }
-
-            $this->ffmpegTask($name);
-        }
-
-        if ($this->errors['metadata'] > 0) {
-            return ['status' => 'error', 'errors' => $this->errors];
-        }
-
-        return ['status' => 'success', 'errors' => null];
     }
 
     /**
@@ -90,7 +51,14 @@ class MetadataProcessor extends BaseProcessor implements MetadataProcessorInterf
      */
     public function ffmpegTask($item): void
     {
-        $video = is_array($item) ? $item['path'] : $this->videoStorageSource($item);
+        if (is_array($item) && isset($item['path'])) {
+            // If we are bulk processing, then pass the bulk processing format
+            $video = $item['path'];
+        } else {
+            // Otherwise just fetch the single file
+            $video = $this->videoStorageSource($item);
+        }
+
         $record = Video::where('filepath', $video)->first();
 
         if ($record && !Metadata::where('video_id', $record->id)->exists()) {
