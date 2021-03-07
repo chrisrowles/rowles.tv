@@ -78,6 +78,11 @@ class ThumbnailProcessor extends BaseProcessor implements ProcessingTaskInterfac
             if ($this->console) {
                 $this->console->success('[' . $filename . '] thumbnail created');
             }
+
+            $this->updateMetadataAttribute($video, [
+                'thumbnail_filepath' => $this->thumbnailStorageDestination($filename, $this->options['gif']['enable']),
+                'thumbnail_filename' => $filename
+            ]);
         } catch (Exception $e) {
             if ($this->console) {
                 $this->console->error("[" . $video . "] " . $e->getMessage() . "\n\n");

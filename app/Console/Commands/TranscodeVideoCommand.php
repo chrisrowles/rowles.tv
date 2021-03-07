@@ -29,7 +29,8 @@ class TranscodeVideoCommand extends Command
         {--bitrate= : Kilo bitrate}
         {--audio-bitrate= : Audio bitrate}
         {--audio-channels= : Audio channels};
-        {--constant-rate-factor= : Constant rate factor}';
+        {--constant-rate-factor= : Constant rate factor};
+        {--is-preview : Is preview}';
 
     /**
      * The console command description.

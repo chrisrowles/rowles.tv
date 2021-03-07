@@ -41,7 +41,8 @@ class TranscodeProcessor extends BaseProcessor implements ProcessingTaskInterfac
             'bitrate' => 1000,
             'audio-bitrate' => 256,
             'audio-channels' => 2,
-            'constant-rate-factor' => 20
+            'constant-rate-factor' => 20,
+            'is-preview' => false
         ];
 
         parent::__construct($console);
@@ -116,6 +117,13 @@ class TranscodeProcessor extends BaseProcessor implements ProcessingTaskInterfac
             $filename = $this->videoStorageDestination(pathinfo($video)['filename']) . '.' . $ext;
 
             $media->save($format, $filename);
+
+            if ($this->options['is-preview']) {
+                $this->updateMetadataAttribute($video, [
+                    'preview_filepath' => $this->videoStorageDestination(""),
+                    'preview_filename' => pathinfo($video)['filename']
+                ]);
+            }
         } catch (Exception $e) {
             if ($this->console) {
                 $this->console->error("[" . $video . "] " . $e->getMessage() . "\n\n");
