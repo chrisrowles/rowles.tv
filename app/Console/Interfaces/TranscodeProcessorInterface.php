@@ -2,14 +2,27 @@
 
 namespace Rowles\Console\Interfaces;
 
+use Exception;
+
 interface TranscodeProcessorInterface extends BaseProcessorInterface
 {
     /**
-     * @param string $name
-     * @param string $ext
+     * @param mixed $name
+     * @param mixed $ext
+     * @param array $opts
+     * @param array $recursiveData
      * @return array
+     *  @throws Exception
      */
-    public function execute(string $name, string $ext = 'mp4'): array;
+    public function execute($name = null, $ext = null, array $opts = [], array $recursiveData = []): array;
+
+    /**
+     * @param mixed $item
+     * @param string $ext
+     * @param array $opts
+     * @return void
+     */
+    public function ffmpegTask($item, string $ext, array $opts) : void;
 
     /**
      * @param int $kiloBitrate

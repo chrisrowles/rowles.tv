@@ -6,33 +6,33 @@
     <div class="text-sm mt-2">
         <ol>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #1
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'DirtyBetty']) }}">
+                    Dirty Betty
                 </a>
             </li>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #2
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'EllaGilbert']) }}">
+                    Ella Gilbert
                 </a>
             </li>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #3
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'MistressAnna']) }}">
+                    Mistress Anna
                 </a>
             </li>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #4
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'MistressMia']) }}">
+                    Mistress Mia
                 </a>
             </li>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #5
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'NewMfx']) }}">
+                    New MFX
                 </a>
             </li>
             <li>
-                <a class="hover:text-purple-300" href="{{ route('video.search', ['title' => '']) }}">
-                    Streamer #6
+                <a class="hover:text-purple-300" href="{{ route('video.search', ['producer' => 'ScatDesire']) }}">
+                    ScatDesire
                 </a>
             </li>
         </ol>

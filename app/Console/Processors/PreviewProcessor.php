@@ -42,8 +42,8 @@ class PreviewProcessor extends BaseProcessor implements PreviewProcessorInterfac
         if ($bulkMode) {
             $scan = empty($recursiveMode) ? $this->getVideosFromStorage() : $recursiveMode;
 
-            if ($this->console) {
-                $this->console->info($scan['total']['files'] . ' previews to generate');
+            if ($this->console && is_integer($scan['total'])) {
+                $this->console->info($scan['total'] . ' previews to generate');
             }
 
             foreach ($scan['items'] as $file) {
@@ -79,9 +79,9 @@ class PreviewProcessor extends BaseProcessor implements PreviewProcessorInterfac
         $video = is_array($item) ? $item['path'] : $this->videoStorageSource($item);
 
         try {
-            $media = $this->openVideo($this->videoStorageSource($video));
+            $media = $this->openVideo($video);
             $media->filters()->clip(TimeCode::fromSeconds($this->start), TimeCode::fromSeconds($this->seconds));
-            $media->save($this->getNewFormat(), $this->previewStorageDestination($video));
+            $media->save($this->getNewFormat(), $this->previewStorageDestination(pathinfo($video)['basename']));
 
             if ($this->console) {
                 $this->console->success('[' . $video . '] preview created');

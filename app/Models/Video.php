@@ -104,6 +104,10 @@ class Video extends Model
             $qb = $qb->where('genre', 'RLIKE', $params['genre']);
         }
 
+        if (isset($params['producer'])) {
+            $qb = $qb->where('producer', '=', $params['producer']);
+        }
+
         if (!empty($columns)) {
             return $qb->paginate($limit, $columns);
         }

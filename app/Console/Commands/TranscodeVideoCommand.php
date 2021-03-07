@@ -3,13 +3,11 @@
 namespace Rowles\Console\Commands;
 
 use Rowles\Console\Interfaces\TranscodeProcessorInterface;
-use Rowles\Console\OutputFormatter;
 use Illuminate\Console\Command;
 use Rowles\Console\OutputHandler;
 
 class TranscodeVideoCommand extends Command
 {
-
     /** @var string  */
     protected string $identifier = 'transcode';
 
@@ -18,12 +16,19 @@ class TranscodeVideoCommand extends Command
      *
      * @var mixed
      */
-    protected $signature = 'vid:transcode {name : Video filename}
-        {--f|format= : The selected format}
-        {--b|bitrate= : Kilo bitrate (default: 1000)}
-        {--ab|audio-bitrate= : Audio bitrate (default: 256)}
-        {--ac|audio-channels= : Audio channels (default: 2)};
-        {--crf|constant-rate-factor= : Constant rate factor (default: 20)}';
+    protected $signature = 'vid:transcode {name? : Video filename}
+        {--b|bulk : Transcode videos in bulk mode}
+        {--c|clip : Enable clip}
+        {--from= : Clip from seconds}
+        {--to= : Clip to seconds}
+        {--r|resize : Enable resize}
+        {--width= : Resize width}
+        {--height= : Resize height}
+        {--e|ext= : File format}
+        {--bitrate= : Kilo bitrate}
+        {--audio-bitrate= : Audio bitrate}
+        {--audio-channels= : Audio channels};
+        {--constant-rate-factor= : Constant rate factor}';
 
     /**
      * The console command description.
@@ -68,8 +73,36 @@ class TranscodeVideoCommand extends Command
             $processor->setConstantRateFactor($this->option('constant-rate-factor'));
         }
 
-        $process = $processor->execute($this->argument('name'), $this->option('format'));
+        try {
+            $process = $processor->execute(
+                $this->argument('name'),
+                $this->option('ext'),
+                $this->mapFormattingConfig()
+            );
 
-        OutputHandler::handle($process, $this->output, $this->identifier);
+            OutputHandler::handle($process, $this->output, $this->identifier);
+        } catch (\Exception $e) {
+            $this->output->error($e->getMessage());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function mapFormattingConfig(): array
+    {
+        return [
+            'bulk' => $this->option('bulk'),
+            'clip' => [
+                'enable' => $this->option('clip'),
+                'from' => $this->option('from'),
+                'to' => $this->option('to')
+            ],
+            'resize' => [
+                'enable' => $this->option('resize'),
+                'width' => $this->option('width'),
+                'height' => $this->option('height')
+            ]
+        ];
     }
 }

@@ -85,90 +85,96 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @return array
      */
-    public function getThumbnailsFromStorage(string $name = ""): array
+    public function getThumbnailsFromStorage(string $path = ""): array
     {
-        return array_slice(scandir($this->thumbnailStorageSource($name)), 2);
+        return array_slice(scandir($this->thumbnailStorageSource($path)), 2);
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @param bool $isGif
      * @return string
      */
-    public function thumbnailStorageSource(string $name = "", bool $isGif = false): string
+    public function thumbnailStorageSource(string $path = "", bool $isGif = false): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
         $folder = $isGif ? 'gif' : 'jpeg';
         $directory = config('storage.image.source') . '/' . $folder;
 
-        return $directory . '/' . $name;
+        return $directory . '/' . $path;
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @param bool $isGif
      * @return string
      */
-    public function thumbnailStorageDestination(string $name, bool $isGif = false): string
+    public function thumbnailStorageDestination(string $path, bool $isGif = false): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
         $folder = $isGif ? 'gif' : 'jpeg';
         $directory = config('storage.image.destination') . '/' . $folder;
 
-        return $directory . '/' . $name;
+        return $directory . '/' . $path;
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @return array
      */
-    public function getPreviewsFromStorage(string $name = ""): array
+    public function getPreviewsFromStorage(string $path = ""): array
     {
-        return array_slice(scandir($this->previewStorageSource($name)), 2);
+        return array_slice(scandir($this->previewStorageSource($path)), 2);
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function previewStorageSource(string $name = ""): string
+    public function previewStorageSource(string $path = ""): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
-        return config('storage.preview.source') . '/' . $name;
+        return config('storage.preview.source') . '/' . $path;
     }
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function previewStorageDestination(string $name): string
+    public function previewStorageDestination(string $path): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
-        return config('storage.preview.destination') . '/' . $name;
+        return config('storage.preview.destination') . '/' . $path;
     }
 
     /**
-     * @param string $name
+     * Recursively scans for videos at a location depending on whether a relative path or an absolute path is passed.
+     *
+     * For example, if $name = "/home/user/videos", then the recursive scan will be performed in that location, if
+     * $name = "videos" and VIDEO_STORAGE_SOURCE is set to "/mnt/d/media", then the recursive scan will be performed in
+     * "/mnt/d/media/videos/"
+     *
+     * @param string $path
      * @return array
      */
-    public function getVideosFromStorage(string $name = ""): array
+    public function getVideosFromStorage(string $path = ""): array
     {
-        $videos = $this->scanRecursive($this->videoStorageSource($name));
+        $videos = $this->scanRecursive($this->videoStorageSource($path));
 
         $videos['total'] = 0;
         $this->numberOfFiles($videos, $videos['total']);
@@ -177,29 +183,39 @@ class BaseProcessor implements BaseProcessorInterface
     }
 
     /**
-     * @param string $name
+     * Returns a path to the video depending on whether a relative path or an absolute path is passed.
+     *
+     * For example, if $name = "/home/user/videos/video.mp4", then that file will be returned, if $name = "video.mp4"
+     * and VIDEO_STORAGE_SOURCE is set to "/mnt/d/media", then "/mnt/d/media/video.mp4" will be returned.
+     *
+     * @param string $path
      * @return string
      */
-    public function videoStorageSource(string $name = ""): string
+    public function videoStorageSource(string $path = ""): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
-        return config('storage.video.source') . '/' . $name;
+        return config('storage.video.source') . '/' . $path;
     }
 
     /**
-     * @param string $name
+     * Returns a path to the video storage destination depending on whether a relative or absolute path is passed.
+     *
+     * For example, if $name = "/home/user/videos/video.mp4", then that destination will be returned, if $name = "video.mp4"
+     * and VIDEO_STORAGE_DESTINATION is set to "/mnt/d/transcoded", then "/mnt/d/transcoded/video.mp4" will be returned.
+     *
+     * @param string $path
      * @return string
      */
-    public function videoStorageDestination(string $name): string
+    public function videoStorageDestination(string $path): string
     {
-        if (is_file($name)) {
-            return $name;
+        if (is_file($path)) {
+            return $path;
         }
 
-        return config('storage.video.destination') . '/' . $name;
+        return config('storage.video.destination') . '/' . $path;
     }
 
     /**
@@ -236,9 +252,10 @@ class BaseProcessor implements BaseProcessorInterface
 
     /**
      * @param $path
+     * @param array $extDisallowed
      * @return array
      */
-    public function scanRecursive($path): array
+    public function scanRecursive($path, array $extDisallowed = []): array
     {
         $files = [
             'items' => [],
@@ -265,13 +282,17 @@ class BaseProcessor implements BaseProcessorInterface
                         'items' => $this->scanRecursive($path . '/' . $f)
                     ];
                 } else {
-                    ++$files['total']['files'];
-                    $files['items'][] = [
-                        'name' => $f,
-                        'type' => "file",
-                        'path' => $path . '/' . $f,
-                        'size' => filesize($path . '/' . $f)
-                    ];
+                    $ext = pathinfo($f, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $extDisallowed)) {
+                        ++$files['total']['files'];
+                        $files['items'][] = [
+                            'name' => $f,
+                            'type' => "file",
+                            'path' => $path . '/' . $f,
+                            'extension' => $ext,
+                            'size' => filesize($path . '/' . $f),
+                        ];
+                    }
                 }
             }
         }

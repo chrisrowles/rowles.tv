@@ -38,60 +38,60 @@ interface BaseProcessorInterface
     public function openVideo(string $name): Video;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return array
      */
-    public function getThumbnailsFromStorage(string $name = ""): array;
+    public function getThumbnailsFromStorage(string $path = ""): array;
 
     /**
-     * @param string $name
+     * @param string $path
      * @param bool $isGif
      * @return string
      */
-    public function thumbnailStorageSource(string $name = "", bool $isGif = false): string;
+    public function thumbnailStorageSource(string $path = "", bool $isGif = false): string;
 
     /**
-     * @param string $name
+     * @param string $path
      * @param bool $isGif
      * @return string
      */
-    public function thumbnailStorageDestination(string $name, bool $isGif = false): string;
+    public function thumbnailStorageDestination(string $path, bool $isGif = false): string;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return array
      */
-    public function getPreviewsFromStorage(string $name = ""): array;
+    public function getPreviewsFromStorage(string $path = ""): array;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function previewStorageSource(string $name = ""): string;
+    public function previewStorageSource(string $path = ""): string;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function previewStorageDestination(string $name): string;
+    public function previewStorageDestination(string $path): string;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return array
      */
-    public function getVideosFromStorage(string $name = ""): array;
+    public function getVideosFromStorage(string $path = ""): array;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function videoStorageSource(string $name = ""): string;
+    public function videoStorageSource(string $path = ""): string;
 
     /**
-     * @param string $name
+     * @param string $path
      * @return string
      */
-    public function videoStorageDestination(string $name): string;
+    public function videoStorageDestination(string $path): string;
 
     /**
      * @param string $ext
@@ -107,9 +107,10 @@ interface BaseProcessorInterface
 
     /**
      * @param $path
+     * @param array $extDisallowed
      * @return array
      */
-    public function scanRecursive($path): array;
+    public function scanRecursive($path, array $extDisallowed): array;
 
     /**
      * @param $scan

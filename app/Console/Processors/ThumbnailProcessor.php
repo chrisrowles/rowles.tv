@@ -25,12 +25,15 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
      * Recursive method to generate video thumbnails.
      *
      * Single
-     * Simply passes the filename to fetch from app storage.
+     * Accepts either an absolute filepath to the video, or a relative filepath which will instead be appended to env
+     * VIDEO_STORAGE_SOURCE, for example, passing "/home/user/videos/video1.mp4" will trigger processing for that video,
+     * whereas passing "media/video1.mp4" with VIDEO_STORAGE_SOURCE set to "/mnt/d/" will trigger processing for the
+     * video "/mnt/d/media/video1.mp4"
      *
      * Bulk Mode
-     * $recursiveMode will be empty upon first scan, if folders are found during the first scan, this method is
-     * called again with $recursiveMode populated with the folders items, this process repeats until no more
-     * sub-folders are left.
+     * Uses env VIDEO_STORAGE_SOURCE which can be set before the command is executed. $recursiveMode will be empty
+     * upon first scan, if folders are found during the first scan, this method is called again with $recursiveMode
+     * populated with the folders items, this process repeats until no more sub-folders are left.
      *
      * @param string $name
      * @param bool $isGif
@@ -40,6 +43,8 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
      */
     public function execute(string $name = "", bool $isGif = false, bool $bulkMode = false, array $recursiveMode = []): array
     {
+        if (substr($name, "1") === '..') return [];
+
         if ($bulkMode) {
             $scan = empty($recursiveMode) ? $this->getVideosFromStorage() : $recursiveMode;
 
@@ -81,7 +86,7 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
 
         try {
             if ($isGif) {
-                $filename = is_array($item) ? $item['name'] : $item;
+                $filename = is_array($item) ? $item['name'] : pathinfo($item)['basename'];
                 $filename .= '.gif';
 
                 $storageDestination = $this->thumbnailStorageDestination($filename, $isGif);
@@ -90,7 +95,7 @@ class ThumbnailProcessor extends BaseProcessor implements ThumbnailProcessorInte
                     ->gif(TimeCode::fromSeconds($this->start), new Dimension(500, 250), $this->seconds)
                     ->save($storageDestination);
             } else {
-                $filename = is_array($item) ? $item['name'] : $item;
+                $filename = is_array($item) ? $item['name'] : pathinfo($item)['basename'];
                 $filename .= '.jpg';
 
                 $storageDestination = $this->thumbnailStorageDestination($filename, $isGif);

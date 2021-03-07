@@ -5,6 +5,12 @@
                name="title" placeholder="{{ __('Enter Title...') }}" value="{{ old('title') }}">
     </div>
     <div class="mt-3 sm:mt-0">
+        <label for="search-producer"></label>
+        <input id="search-producer" type="text"
+               class="form-input {{ $theme }} border-gray-300"
+               name="producer" placeholder="{{ __('Enter Producer...') }}" value="{{ old('producer') }}">
+    </div>
+    <div class="mt-3 sm:mt-0">
         <label for="search-genre"></label>
         <input id="search-genre" type="text"
                class="form-input {{ $theme }} border-gray-300"
