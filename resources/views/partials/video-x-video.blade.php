@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function select() {
+    function xVideo() {
         return {
             id: null,
             data: @json(['rows' => $videos->items()]),

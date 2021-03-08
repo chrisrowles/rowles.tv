@@ -105,7 +105,7 @@ class Video extends Model
         }
 
         if (isset($params['producer'])) {
-            $qb = $qb->where('producer', '=', $params['producer']);
+            $qb = $qb->where('producer', 'RLIKE', $params['producer']);
         }
 
         if (!empty($columns)) {

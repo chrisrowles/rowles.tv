@@ -21,8 +21,9 @@ notify.toast = Swal.mixin({
 });
 
 
-notify.send = (type, msg) => {
+notify.send = (type, msg, position = 'bottom-end') => {
     notify.toast.fire({
+        position: position,
         icon: type,
         title: msg
     });

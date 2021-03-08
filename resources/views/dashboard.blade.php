@@ -7,7 +7,7 @@
     </div>
     <div class="pb-6">
         <div class="max-w-full mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 items-start md:gap-10" x-data="select()">
+            <div class="grid grid-cols-1 md:grid-cols-2 items-start md:gap-10" x-data="xVideo()">
                 <div class="h-full md:border-r md:border-gray-300 md:pr-10">
                     <div class="gap-2">
                         <div class="flex gap-2">
@@ -43,4 +43,4 @@
         </div>
     </div>
 </x-app-layout>
-@include('partials.video-x-select')
+@include('partials.video-x-video')

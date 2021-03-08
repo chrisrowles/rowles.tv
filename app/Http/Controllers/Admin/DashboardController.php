@@ -19,7 +19,7 @@ class DashboardController extends Controller
             $limit = (int) $request->get('limit');
         }
 
-        if ($request->get('title') || $request->get('genre')) {
+        if ($request->get('title') || $request->get('genre') || $request->get('producer')) {
             $videos = Video::search($request->all(), ['id', 'title', 'producer'], $limit);
         } else {
             $videos = Video::paginate($limit, ['id', 'title', 'producer']);

@@ -1,3 +1,5 @@
+import notify from "./notify";
+
 const video = {};
 
 let headers = {
@@ -88,8 +90,6 @@ video.get = (route, refs) => {
 }
 
 video.update = (route, refs) => {
-    video.resetFormFields();
-
     let data = {
         title: refs.selectedVideoTitle.value,
         producer: refs.selectedVideoProducer.value,
@@ -117,7 +117,7 @@ video.update = (route, refs) => {
                 elem.innerText = data.errors[field][0];
             });
         } else {
-            alert("Data successfully updated.");
+            notify.send('success', 'Video information successfully updated.', 'top');
         }
     }
 

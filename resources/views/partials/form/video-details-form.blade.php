@@ -2,21 +2,34 @@
     <input type="hidden" name="_method" value="put"/>
     @csrf
     <div class="mb-4">
-        <label class="form-label" for="title">{{ __('Title') }}</label>
-        <input class="form-input w-full" id="title" type="text" placeholder="{{ __('Enter Title...') }}"
-               x-ref="selectedVideoTitle">
+        <x-label for="title" :value="__('Title')" class="form-label" />
+        <x-input id="title"
+                 type="text"
+                 class="form-input w-full"
+                 name="title"
+                 x-ref="selectedVideoTitle"
+                 placeholder="{{ __('Enter Title...') }}"
+                 required />
         <small class="text-red-500 error hidden" id="title-error"></small>
     </div>
     <div class="mb-4">
-        <label class="form-label" for="producer">{{ __('Producer') }}</label>
-        <input class="form-input w-full" id="producer" type="text" placeholder="{{ __('Enter Producer...') }}"
-               x-ref="selectedVideoProducer">
+        <x-label for="producer" :value="__('Producer')" class="form-label" />
+        <x-input id="producer"
+                 type="text"
+                 class="form-input w-full"
+                 name="producer"
+                 x-ref="selectedVideoProducer"
+                 placeholder="{{ __('Enter Producer...') }}" />
         <small class="text-red-500 error hidden" id="producer-error"></small>
     </div>
     <div class="mb-4">
-        <label class="form-label" for="genre">{{ __('Genre') }}</label>
-        <input class="form-input w-full" id="genre" type="text" placeholder="{{ __('Enter Genre...') }}"
-               x-ref="selectedVideoGenre">
+        <x-label for="genre" :value="__('Genre')" class="form-label" />
+        <x-input id="genre"
+                 type="text"
+                 class="form-input w-full"
+                 name="genre"
+                 x-ref="selectedVideoGenre"
+                 placeholder="{{ __('Enter Genre...') }}" />
         <small class="text-red-500 error hidden" id="genre-error"></small>
     </div>
     <div class="mb-4">
