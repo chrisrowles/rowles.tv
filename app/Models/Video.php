@@ -117,12 +117,12 @@ class Video extends Model
 
     public function scopeRelated(Builder $qb, Video $video)
     {
-        if (is_null($video->title)) {
+        if (is_null($video->producer)) {
             return [];
         }
 
         $qb->where('id', '!=', $video->id);
-        $qb->where('title', 'RLIKE', substr($video->title, 0, 10));
+        $qb->where('producer', $video->producer);
 
         return $qb->get();
     }

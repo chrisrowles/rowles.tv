@@ -14,7 +14,7 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = 10;
+        $limit = 15;
         if ($request->get('limit')) {
             $limit = (int) $request->get('limit');
         }

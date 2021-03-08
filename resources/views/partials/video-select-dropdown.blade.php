@@ -1,6 +1,6 @@
 <label for="video-dropdown" class="hidden">{{ __('Select Video') }}</label>
 <select id="video-dropdown" class="w-full text-xs border-gray-300" x-model="id">
-    <option :value="false" x-text="'-- Please Select --'"></option>
+    <option :value="false" x-text="'-- Quick Select --'"></option>
     <template x-for="video in list.options">
         <option :value="video.id" x-text="video.title"></option>
     </template>

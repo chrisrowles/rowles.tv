@@ -13,14 +13,14 @@
                         <div class="flex gap-2">
                             @include('partials.video-select-dropdown')
                         </div>
-                        <div class="pt-3 items-center gap-2 hidden md:flex">
+                        <div class="pt-6 items-center gap-2">
                             @include('partials.form.video-search-form', [
                                 'action' => route('dashboard'),
                                 'theme' => 'bg-white text-black',
                                 'button' => 'primary-button'
                             ])
                         </div>
-                        <div class="hidden md:block">
+                        <div class="pt-3 hidden md:block">
                             @include('partials.video-list-table')
                         </div>
                         <div class="mt-6 hidden md:block">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="mt-6 md:mt-0">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                         @include('partials.form.video-details-form')
                         <div class="pt-7">
                             <img class="w-full hidden" src=""
