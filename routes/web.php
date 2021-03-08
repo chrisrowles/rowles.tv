@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +14,10 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 */
 
 Route::group(['middleware' => ['auth', 'verified']], function() {
-    Route::get('/', 'VideoController@index')->name('video.index');
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::post('/billing', 'BillingController@index')->name('billing');
+
+    Route::get('/home', 'VideoController@index')->name('video.index');
     Route::get('/search', 'VideoController@search')->name('video.search');
     Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
 
