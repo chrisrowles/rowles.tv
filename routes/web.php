@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/subscribe', 'SubscribeController@index')->name('subscribe');
     Route::post('/billing', 'BillingController@index')->name('billing');
+    Route::get('/billing/confirm', 'BillingController@confirm')->name('billing.confirm');
 
     Route::middleware('subscribed')->group(function() {
         Route::get('/', 'VideoController@index')->name('video.index');

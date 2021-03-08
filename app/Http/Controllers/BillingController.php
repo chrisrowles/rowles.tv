@@ -24,13 +24,19 @@ class BillingController extends Controller
                     'email' => $user->email
                 ]);
         } catch (IncompletePayment $e) {
-            if ($e->payment->requiresAction()) {
-                return redirect()->back()->with(['payment_intent' => $e->payment->clientSecret()]);
-            }
-
-            return redirect()->back()->with(['error_message' => $e->getMessage()]);
+            return redirect()->route(
+                'cashier.payment',
+                [$e->payment->id, 'redirect' => route('billing.confirm')]
+            );
         }
 
         return redirect()->back();
+    }
+
+    public function confirm()
+    {
+        Auth::user()->subscription()->syncStripeStatus();
+
+        return redirect()->route('video.index');
     }
 }
