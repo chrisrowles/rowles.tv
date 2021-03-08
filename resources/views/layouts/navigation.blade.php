@@ -4,14 +4,11 @@
             <div class="flex">
                 @include('components.logo')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex text-white">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('video.search')">
-                        {{ __('News') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('video.index')" :active="request()->routeIs('video.index')">
                         {{ __('Videos') }}
                     </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('video.search')">
-                        {{ __('Categories') }}
+                        {{ __('Membership') }}
                     </x-nav-link>
                 </div>
             </div>

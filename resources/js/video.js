@@ -102,12 +102,8 @@ video.update = (route, refs) => {
     });
 
     const handleResponse = response => {
-        if (!response.ok) {
-            if (response.status === 422) { // Validation error
-                return response.json();
-            } else {
-                throw new Error(response.statusText);
-            }
+        if (!response.ok && response.status !== 422) {
+            throw new Error(response.statusText);
         }
 
         return response.json();

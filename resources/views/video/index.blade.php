@@ -19,7 +19,7 @@
                                     <span class="flex flex-nowrap">@include('components.logo')</span>
                                     Community Today!
                                 </h2>
-                                <button class="default-button text-white bg-purple-600 hover:bg-purple-500 mt-3 py-3 sm:rounded-lg">
+                                <button class="default-button text-white bg-yellow-600 hover:bg-yellow-500 mt-3 py-3 sm:rounded-lg">
                                     Subscribe Now
                                 </button>
                             </div>
@@ -29,11 +29,13 @@
                 <div class="col-span-12 md:col-span-10">
                     <div class="mb-5">
                         <div class="pt-2 px-5 md:px-0">
-                            <h2 class="text-xl mb-2">{{ __('Search Videos') }}</h2>
+                            <h2 class="text-xl mb-2">{{ __('Search Videos') }}
+                                <span class="text-gray-400 text-xs">(We have {{ $videos->total() }} in total!)</span>
+                            </h2>
                             @include('partials.form.video-search-form', [
                                 'action' => route('video.search'),
                                 'theme' => 'bg-white text-gray-600',
-                                'button' => 'bg-purple-600 hover:bg-purple-500 text-white'
+                                'button' => 'bg-yellow-600 hover:bg-yellow-500 text-white'
                             ])
                         </div>
                     </div>

@@ -3,7 +3,7 @@
         <x-slot name="logo">
             @include('components.logo')
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-purple-600" />
+                <x-application-logo class="w-20 h-20 fill-current text-yellow-600" />
             </a>
         </x-slot>
 
@@ -52,7 +52,7 @@
                     </a>
                 @endif
 
-                <button type="submit" class="ml-3 py-2 default-button bg-purple-600 hover:bg-purple-500">
+                <button type="submit" class="ml-3 py-2 default-button bg-yellow-600 hover:bg-yellow-500">
                     {{ __('Log in') }}
                 </button>
             </div>

@@ -54,6 +54,7 @@ Options:
       --audio-bitrate[=AUDIO-BITRATE]                Audio bitrate (256)
       --audio-channels[=AUDIO-CHANNELS]              Audio channels (2)
       --constant-rate-factor[=CONSTANT-RATE-FACTOR]  Constant rate factor (24)
+      --is-preview                                   Save to previews directory
   -h, --help                                         Display help for the given command. When no command is given display help for the list command
 ```
 
@@ -88,7 +89,7 @@ If you want to clip your video, pass the following options:
 For example:
 
 ```sh
-php artisan vid:transcode /path/to/video.mp4 --ext=mkv --clip --from=40 --to=10
+php artisan vid:transcode /path/to/video.mp4 --clip --from=40 --to=10
 ```
 
 Output:
@@ -113,7 +114,7 @@ If you want to resize your video, pass the following options:
 For example:
 
 ```sh
-php artisan vid:transcode /path/to/video.mp4 --ext=mkv --resize --width=350 --height=200
+php artisan vid:transcode /path/to/video.mp4 --resize --width=350 --height=200
 ```
 
 Output:
@@ -130,7 +131,7 @@ Output:
 If you want to bulk process a directory of videos (_note: this will scan your folder and all sub-folders recursively._)
 
 ```sh
-php artisan vid:transcode --bulk /path/to/videos --ext=mkv
+php artisan vid:transcode --bulk /path/to/videos --resize --width=1080 --height=auto
 ```
 
 Output:
