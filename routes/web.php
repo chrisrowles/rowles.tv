@@ -13,26 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['auth', 'verified']], function() {
-    Route::get('/', 'HomeController@index')->name('home');
+Route::middleware(['auth', 'verified'])->group(function() {
+    Route::get('/subscribe', 'SubscribeController@index')->name('subscribe');
     Route::post('/billing', 'BillingController@index')->name('billing');
 
-    Route::get('/home', 'VideoController@index')->name('video.index');
-    Route::get('/search', 'VideoController@search')->name('video.search');
-    Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
+    Route::middleware('subscribed')->group(function() {
+        Route::get('/', 'VideoController@index')->name('video.index');
+        Route::get('/search', 'VideoController@search')->name('video.search');
+        Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
 
-    Route::group(['prefix' => 'membership'], function() {
-        Route::get('/packages', 'Membership\SubscriptionController@index')->name('membership.packages');
-    });
+        Route::prefix('4a198aba')->group(function() {
+            Route::prefix('api')->group(function() {
+                Route::get('/video', 'Api\VideoController@index')->name('api.video.index');
+                Route::get('/video/{id}', 'Api\VideoController@get')->name('api.video.get');
+                Route::put('/video/{id}', 'Api\VideoController@update')->name('api.video.update');
+            });
 
-    Route::group(['prefix' => 'api'], function() {
-        Route::get('/video', 'Api\VideoController@index')->name('api.video.index');
-        Route::get('/video/{id}', 'Api\VideoController@get')->name('api.video.get');
-        Route::put('/video/{id}', 'Api\VideoController@update')->name('api.video.update');
-    });
-
-    Route::group(['prefix' => '4a198aba'], function() {
-        Route::get('/dashboard','Admin\DashboardController@index')->name('dashboard');
+            Route::get('/dashboard','Admin\DashboardController@index')->name('dashboard');
+        });
     });
 });
 

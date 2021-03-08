@@ -23,8 +23,12 @@ class BillingController extends Controller
                 ->create($request->get('payment_method'), [
                     'email' => $user->email
                 ]);
-        } catch ( IncompletePayment $exception ){
-            return redirect()->back()->with(['error_message' => $exception->getMessage()]);
+        } catch (IncompletePayment $e) {
+            if ($e->payment->requiresAction()) {
+                return redirect()->back()->with(['payment_intent' => $e->payment->clientSecret()]);
+            }
+
+            return redirect()->back()->with(['error_message' => $e->getMessage()]);
         }
 
         return redirect()->back();
