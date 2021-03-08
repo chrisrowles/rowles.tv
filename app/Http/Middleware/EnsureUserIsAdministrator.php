@@ -5,8 +5,9 @@ namespace Rowles\Http\Middleware;
 use Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Rowles\Models\User;
 
-class EnsureIsSubscribed
+class EnsureUserIsAdministrator
 {
     /**
      * Handle an incoming request.
@@ -17,8 +18,8 @@ class EnsureIsSubscribed
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->subscribed()) {
-            return redirect()->route('subscribe');
+        if (Auth::user()->role !== User::ADMINISTRATOR) {
+            abort(403);
         }
 
         return $next($request);

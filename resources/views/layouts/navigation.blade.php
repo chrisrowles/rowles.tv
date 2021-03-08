@@ -7,8 +7,8 @@
                     <x-nav-link :href="route('video.index')" :active="request()->routeIs('video.index')">
                         {{ __('Videos') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('video.search')">
-                        {{ __('Membership') }}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -29,9 +29,11 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                                {{ __('Dashboard') }}
-                            </x-dropdown-link>
+                            @if(Auth::user() && Auth::user()->subscribed())
+                                <x-dropdown-link :href="route('billing.portal')">
+                                    {{ __('Billing Portal') }}
+                                </x-dropdown-link>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"

@@ -30,8 +30,7 @@
                             <div id="card-errors"
                                  class="text-red-400 text-bold mt-2 text-sm font-medium"></div>
                         </div>
-                        <x-button id="card-button" class="inline-block align-middle float-right mr-6 py-3"
-                                  data-secret="{{ session('payment_client_secret') }}">
+                        <x-button id="card-button" class="inline-block align-middle float-right mr-6 py-3">
                             {{ __('Pay Now & Subscribe') }}
                         </x-button>
                     </form>

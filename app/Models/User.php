@@ -2,6 +2,7 @@
 
 namespace Rowles\Models;
 
+use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\DatabaseNotification;
@@ -48,10 +49,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|User whereCardLastFour($value)
  * @method static Builder|User whereStripeId($value)
  * @method static Builder|User whereTrialEndsAt($value)
+ * @property int|null $role
+ * @method static Builder|User whereRole($value)
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Billable, Notifiable;
+
+    const USER = 1;
+    const ADMINISTRATOR = 2;
 
     /**
      * The attributes that are mass assignable.

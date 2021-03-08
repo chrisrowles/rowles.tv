@@ -33,10 +33,21 @@ class BillingController extends Controller
         return redirect()->back();
     }
 
-    public function confirm()
+    /**
+     * @return RedirectResponse
+     */
+    public function confirm(): RedirectResponse
     {
         Auth::user()->subscription()->syncStripeStatus();
 
         return redirect()->route('video.index');
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function portal(): RedirectResponse
+    {
+        return Auth::user()->redirectToBillingPortal(route('video.index'));
     }
 }
