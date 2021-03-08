@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.app')
+
+@section('content')
     <div class="hidden md:block hero-image relative">
         <div class="overlay bg-dark opacity-70"></div>
     </div>
@@ -16,7 +18,9 @@
                             <div class="card-inner bg-white shadow-inner">
                                 <h2 class="text-2xl font-bold">
                                     Join the
-                                    <span class="flex flex-nowrap">@include('components.logo')</span>
+                                    <span class="flex flex-nowrap">
+                                        @include('components.logo-text')
+                                    </span>
                                     Community Today!
                                 </h2>
                                 <button class="default-button text-white bg-yellow-600 hover:bg-yellow-500 mt-3 py-3 sm:rounded-lg">
@@ -55,4 +59,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.app')
+@section('content')
     <div class="hidden md:block hero-image relative max-h-64">
         <div class="overlay bg-dark opacity-70"></div>
     </div>
@@ -76,52 +77,54 @@
             </p>
         </div>
     </div>
-</x-app-layout>
+@endsection
 
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    const stripe = Stripe('{{ config("stripe.publishable_key") }}');
-    const elements = stripe.elements();
-    const cardElement = elements.create('card');
-    cardElement.mount('#card-element');
+@section('scripts')
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('{{ config("stripe.publishable_key") }}');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
 
-    const cardHolderName = document.getElementById('name');
-    const cardButton = document.getElementById('card-button');
-    let validCard = false;
-    const cardError = document.getElementById('card-errors');
-    cardElement.addEventListener('change', function(event) {
+        const cardHolderName = document.getElementById('name');
+        const cardButton = document.getElementById('card-button');
+        let validCard = false;
+        const cardError = document.getElementById('card-errors');
+        cardElement.addEventListener('change', function(event) {
 
-        if (event.error) {
-            validCard = false;
-            cardError.textContent = event.error.message;
-        } else {
-            validCard = true;
-            cardError.textContent = '';
-        }
-    });
-    let form = document.getElementById('signup-form');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const {paymentMethod, error} = await stripe.createPaymentMethod(
-            'card', cardElement, {
-                billing_details: {name: cardHolderName.value}
+            if (event.error) {
+                validCard = false;
+                cardError.textContent = event.error.message;
+            } else {
+                validCard = true;
+                cardError.textContent = '';
             }
-        );
-        if (error) {
-            _notify.send('error', error.message, 'top');
-        } else {
-            let hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'payment_method');
-            hiddenInput.setAttribute('value', paymentMethod.id);
-            form.appendChild(hiddenInput);
-            form.submit();
-        }
-    });
+        });
+        let form = document.getElementById('signup-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const {paymentMethod, error} = await stripe.createPaymentMethod(
+                'card', cardElement, {
+                    billing_details: {name: cardHolderName.value}
+                }
+            );
+            if (error) {
+                _notify.send('error', error.message, 'top');
+            } else {
+                let hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'payment_method');
+                hiddenInput.setAttribute('value', paymentMethod.id);
+                form.appendChild(hiddenInput);
+                form.submit();
+            }
+        });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        @if(session('error'))
+        document.addEventListener('DOMContentLoaded', () => {
+            @if(session('error'))
             _notify.send('error', '{{ session('error') }}', 'top');
-        @endif
-    })
-</script>
+            @endif
+        })
+    </script>
+@endsection

@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.app')
+@section('content')
     <div class="breadcrumbs">
         {{ Breadcrumbs::render('watch', $video) }}
     </div>
@@ -21,4 +22,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

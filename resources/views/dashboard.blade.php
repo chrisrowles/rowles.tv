@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.app')
+
+@section('content')
     <div class="breadcrumbs">
         {{ Breadcrumbs::render('dashboard') }}
     </div>
@@ -42,5 +44,8 @@
             </div>
         </div>
     </div>
-</x-app-layout>
-@include('partials.video-x-video')
+@endsection
+
+@section('scripts')
+    @include('partials.refs.video-x-ref')
+@endsection

@@ -8279,6 +8279,35 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
 
+document.addEventListener('DOMContentLoaded', function () {
+  var text = "lovepoo".toUpperCase();
+  var container = document.querySelectorAll('.logo-text');
+
+  if (container) {
+    container.forEach(function (instance) {
+      var shades = [700, 600, 500, 400];
+      var shadeIndex = 0;
+      var logo = document.createElement('span');
+
+      for (textIndex = 0; textIndex < text.length; ++textIndex) {
+        var textNode = document.createElement('span');
+
+        if (!shades[shadeIndex]) {
+          shades = shades.slice().reverse();
+          shadeIndex = 1;
+        }
+
+        textNode.classList.add('text-' + "yellow" + '-' + shades[shadeIndex]);
+        textNode.innerText = text[textIndex];
+        logo.appendChild(textNode);
+        ++shadeIndex;
+      }
+
+      instance.prepend(logo);
+    });
+  }
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

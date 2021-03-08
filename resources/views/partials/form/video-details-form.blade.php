@@ -1,5 +1,5 @@
 <form action="/" method="POST" @submit.prevent="update()">
-    <input type="hidden" name="_method" value="put"/>
+    <x-input type="hidden" name="_method" value="put"/>
     @csrf
     <div class="mb-4">
         <x-label for="title" :value="__('Title')" class="form-label" />
@@ -39,8 +39,8 @@
         <small class="text-red-500 error hidden" id="description-error"></small>
     </div>
     <div class="flex items-center justify-between">
-        <button class="primary-button" type="submit">
+        <x-button class="primary-button">
             {{ __('Submit') }}
-        </button>
+        </x-button>
     </div>
 </form>
