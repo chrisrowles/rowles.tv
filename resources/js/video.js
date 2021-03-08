@@ -32,8 +32,8 @@ video.get = (route, refs) => {
         refs.selectedVideoDescription.value = data.description;
 
         let thumbnail = document.getElementById('video-thumbnail');
-        thumbnail.classList.remove('hidden');
         if (thumbnail && data.metadata.thumbnail_filename) {
+            thumbnail.classList.remove('hidden');
             thumbnail.src = '/storage/images/jpeg/' + data.metadata.thumbnail_filename;
         }
 
