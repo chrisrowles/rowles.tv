@@ -13,7 +13,6 @@ class VideoController extends Controller
      */
     public function index(Request $request)
     {
-        dd(Cashier::findBillable("cus_J4tmy5OzNaxpjg"));
         $limit = 24;
         if ($request->get('limit')) {
             $limit = $request->get('limit');
