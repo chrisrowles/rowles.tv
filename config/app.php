@@ -177,7 +177,7 @@ return [
         // Rowles\Providers\BroadcastServiceProvider::class,
         Rowles\Providers\EventServiceProvider::class,
         Rowles\Providers\RouteServiceProvider::class,
-        Rowles\Providers\ProcessorServiceProvider::class,
+        Rowles\Providers\ProcessorServiceProvider::class
     ],
 
     /*

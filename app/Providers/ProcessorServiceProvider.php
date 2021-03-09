@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 use Rowles\Console\Processors\BaseProcessor;
 use Rowles\Console\Interfaces\BaseProcessorInterface;
+use Rowles\Console\Processors\MetadataProcessor;
+use Rowles\Console\Processors\ThumbnailProcessor;
 
 class ProcessorServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,18 @@ class ProcessorServiceProvider extends ServiceProvider
     {
         $this->app->bind(BaseProcessorInterface::class, function() {
             return new BaseProcessor();
+        });
+
+        $this->app->bind('metadata.processor', function() {
+            return new MetadataProcessor();
+        });
+
+        $this->app->bind('thumbnail.processor', function() {
+            return new ThumbnailProcessor();
+        });
+
+        $this->app->bind('transcode.processor', function() {
+            return new ThumbnailProcessor();
         });
     }
 
