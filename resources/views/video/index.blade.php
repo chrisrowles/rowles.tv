@@ -11,16 +11,14 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
                 <div class="hidden md:block col-span-2">
-                    @include('partials.menu.video-stars-menu')
+                    @include('partials.menu.video-producers-menu')
                     @include('partials.menu.video-categories-menu', ['classes' => 'mt-5'])
                     <div class="mt-10">
                         <div class="card bg-white sm:rounded-lg border shadow">
                             <div class="card-inner bg-white shadow-inner">
                                 <h2 class="text-2xl font-bold">
                                     Join the
-                                    <span class="flex flex-nowrap">
-                                        @include('components.logo-text')
-                                    </span>
+                                    <span class="flex flex-nowrap"><x-logo-text /></span>
                                     Community Today!
                                 </h2>
                                 <button class="default-button text-white bg-yellow-600 hover:bg-yellow-500 mt-3 py-3 sm:rounded-lg">

@@ -2,7 +2,7 @@
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                @include('components.logo-text')
+                <x-logo-text />
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex text-white">
                     <x-nav-link :href="route('video.index')" :active="request()->routeIs('video.index')">
                         {{ __('Videos') }}

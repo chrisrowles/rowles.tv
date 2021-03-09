@@ -20,7 +20,11 @@ class VideoController extends Controller
 
         $videos = Video::paginate($limit);
 
-        return view('video.index', compact('videos'));
+        // Todo, create category and producer model
+        $categories = ["Test One", "Test Two", "Test Three"];
+        $producers = ["Test One", "Test Two", "Test Three"];
+
+        return view('video.index', compact('videos', 'categories', 'producers'));
     }
 
     /**
