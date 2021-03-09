@@ -356,6 +356,8 @@ class BaseProcessor implements BaseProcessorInterface
             if ($item['type'] === 'folder') {
                 $count += $item['items']['total']['files'];
                 $this->numberOfFiles($item['items'], $count);
+            } else {
+                ++$count;
             }
         }
     }

@@ -70,11 +70,11 @@
                 {{ config('app.company.name') }} reserves the right to cancel your subscription at any time without providing
                 a detailed explanation, although please note that this will only occur in exceptional circumstances.
             </p>
-            <p class="mt-2 text-xs text-gray-400">
-                Have fun!
-            </p>
         </div>
     </div>
+@endsection
+
+@section('footer')
 @endsection
 
 @section('scripts')

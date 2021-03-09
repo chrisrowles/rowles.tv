@@ -8,7 +8,7 @@
                         {{ __('Videos') }}
                     </x-nav-link>
                     @if(Auth::check() && Auth::user()->role === 2)
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     @endif

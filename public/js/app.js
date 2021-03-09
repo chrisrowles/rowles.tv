@@ -8280,7 +8280,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
 
 document.addEventListener('DOMContentLoaded', function () {
-  var text = "lovepoo".toUpperCase();
+  var text = "FUCKYEAHTV".toUpperCase();
   var container = document.querySelectorAll('.logo-text');
 
   if (container) {

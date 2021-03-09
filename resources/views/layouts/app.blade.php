@@ -15,6 +15,7 @@
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+        <script src="https://cdn.jwplayer.com/libraries/uyF4lkv3.js"></script>
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{ asset('js/video.js') }}" defer></script>
     </head>
@@ -26,9 +27,9 @@
             @yield('content')
         </main>
         <!-- Include footer -->
-        @include('layouts.footer')
+{{--        @include('layouts.footer')--}}
         <!-- Yield footer (provides the ability to override the footer completely where needed) -->
-        @yield('footer')
+{{--        @yield('footer')--}}
         <!-- Yield extra javascript -->
         @yield('scripts')
     </body>

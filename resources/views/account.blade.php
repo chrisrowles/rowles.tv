@@ -3,7 +3,7 @@
 @section('content')
     <x-hero-image class="max-h-64"/>
     <div class="py-6 px-4 sm:px-6 lg:px-8 bg-dark text-white flex flex-wrap justify-between items-center">
-        <h1 class="text-2xl">{{ __('Your Account') }}</h1>
+        <h1 class="text-2xl">{{ $user->name }} - {{ __('Account Management') }}</h1>
         @if($plan)
             <div class="flex flex-col">
                 <span class="text-gray-400 text-sm">Plan: {{ $plan->nickname }}</span>
@@ -22,8 +22,8 @@
                         <x-input type="hidden" name="_method" value="put"/>
                         @csrf
                         <div class="mb-4">
-                            <x-label for="title" :value="__('Title')" class="form-label" />
-                            <x-input id="title"
+                            <x-label for="name" :value="__('Name')" class="form-label" />
+                            <x-input id="name"
                                      type="text"
                                      class="form-input w-full"
                                      name="name"
