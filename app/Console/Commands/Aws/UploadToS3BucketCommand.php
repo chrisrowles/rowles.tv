@@ -5,7 +5,7 @@ namespace Rowles\Console\Commands\Aws;
 use File;
 use Storage;
 use Illuminate\Console\Command;
-use Rowles\Console\Interfaces\BaseProcessorInterface;
+use Rowles\Console\Processors\BaseProcessorInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class UploadToS3BucketCommand extends Command

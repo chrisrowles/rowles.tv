@@ -32,5 +32,16 @@
 {{--        @yield('footer')--}}
         <!-- Yield extra javascript -->
         @yield('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                @if(session('error'))
+                _notify.send('error', '{{ session('error') }}', 'top');
+                @endif
+
+                @if(session('success'))
+                _notify.send('success', '{{ session('success') }}', 'top');
+                @endif
+            })
+        </script>
     </body>
 </html>

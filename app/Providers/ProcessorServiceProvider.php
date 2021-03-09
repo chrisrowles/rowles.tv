@@ -5,7 +5,7 @@ namespace Rowles\Providers;
 use Illuminate\Support\ServiceProvider;
 
 use Rowles\Console\Processors\BaseProcessor;
-use Rowles\Console\Interfaces\BaseProcessorInterface;
+use Rowles\Console\Processors\BaseProcessorInterface;
 use Rowles\Console\Processors\MetadataProcessor;
 use Rowles\Console\Processors\ThumbnailProcessor;
 

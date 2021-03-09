@@ -10,7 +10,6 @@ use Rowles\Models\Metadata;
 use Rowles\Console\OutputFormatter;
 use Illuminate\Console\OutputStyle;
 use FFMpeg\Exception\InvalidArgumentException;
-use Rowles\Console\Interfaces\BaseProcessorInterface;
 use FFMpeg\Format\Video\{DefaultVideo, X264, WMV, WebM};
 
 class BaseProcessor implements BaseProcessorInterface

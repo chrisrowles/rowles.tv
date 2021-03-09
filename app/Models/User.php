@@ -2,7 +2,6 @@
 
 namespace Rowles\Models;
 
-use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\DatabaseNotification;

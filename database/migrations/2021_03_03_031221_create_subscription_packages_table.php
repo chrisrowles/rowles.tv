@@ -15,10 +15,10 @@ class CreateSubscriptionPackagesTable extends Migration
     {
         Schema::create('subscription_packages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('subscription_id');
+            $table->string('product_id');
             $table->string('name');
             $table->text('description');
-            $table->integer('price');
+            $table->string('price');
             $table->string('interval');
             $table->timestamps();
         });

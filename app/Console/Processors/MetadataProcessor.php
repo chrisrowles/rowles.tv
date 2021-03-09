@@ -5,7 +5,6 @@ namespace Rowles\Console\Processors;
 use Rowles\Models\Video;
 use Rowles\Models\Metadata;
 use FFMpeg\Exception\InvalidArgumentException;
-use Rowles\Console\Interfaces\ProcessingTaskInterface;
 
 class MetadataProcessor extends BaseProcessor implements ProcessingTaskInterface
 {

@@ -118,11 +118,5 @@
                 form.submit();
             }
         });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            @if(session('error'))
-            _notify.send('error', '{{ session('error') }}', 'top');
-            @endif
-        })
     </script>
 @endsection

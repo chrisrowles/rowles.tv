@@ -2,6 +2,7 @@
 
 namespace Rowles\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,8 +29,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SubscriptionPackage whereSubscriptionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SubscriptionPackage whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $product_id
+ * @method static \Illuminate\Database\Eloquent\Builder|SubscriptionPackage whereProductId($value)
  */
 class SubscriptionPackage extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'description'];
 }

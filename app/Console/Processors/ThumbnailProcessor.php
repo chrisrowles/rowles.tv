@@ -5,7 +5,6 @@ namespace Rowles\Console\Processors;
 use Exception;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Coordinate\Dimension;
-use Rowles\Console\Interfaces\ProcessingTaskInterface;
 
 class ThumbnailProcessor extends BaseProcessor implements ProcessingTaskInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rowles\Console\Interfaces;
+namespace Rowles\Console\Processors;
 
 interface ProcessingTaskInterface extends BaseProcessorInterface
 {

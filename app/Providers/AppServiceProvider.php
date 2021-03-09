@@ -3,7 +3,7 @@
 namespace Rowles\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Rowles\PaymentProvider;
+use Rowles\DefaultPaymentProvider;
 use Rowles\PaymentProviderInterface;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(PaymentProviderInterface::class, function() {
-            return new PaymentProvider(config('stripe.secret_key'));
+            return new DefaultPaymentProvider(config('stripe.secret_key'));
         });
     }
 

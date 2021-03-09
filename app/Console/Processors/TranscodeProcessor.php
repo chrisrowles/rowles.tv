@@ -5,7 +5,6 @@ namespace Rowles\Console\Processors;
 use Exception;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Coordinate\Dimension;
-use Rowles\Console\Interfaces\ProcessingTaskInterface;
 
 class TranscodeProcessor extends BaseProcessor implements ProcessingTaskInterface
 {

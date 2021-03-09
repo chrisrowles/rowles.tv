@@ -14,7 +14,7 @@ class BillingController extends Controller
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function index(Request $request) : RedirectResponse
+    public function post(Request $request) : RedirectResponse
     {
         $user = Auth::user();
 

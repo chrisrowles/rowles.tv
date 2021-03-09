@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-hero-image class="max-h-64"/>
+    <x-hero-image class="max-h-40"/>
     <div class="py-6 px-4 sm:px-6 lg:px-8 bg-dark text-white flex flex-wrap justify-between items-center">
         <h1 class="text-2xl">{{ $user->name }} - {{ __('Account Management') }}</h1>
         @if($plan)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rowles\Console\Interfaces;
+namespace Rowles\Console\Processors;
 
 use Exception;
 use FFMpeg\Media\Video;

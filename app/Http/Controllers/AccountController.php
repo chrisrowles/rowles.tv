@@ -24,7 +24,7 @@ class AccountController extends Controller
         $user = Auth::user();
         try {
             if (Cache::offsetExists($user->email.':subscription_plan')) {
-                // TODO add event to invalidate this cache if user updates their subscription.
+                // TODO add event to invalidate this cache on login and if user updates their subscription.
                 //    Subscription management is handled through the Stripe billing portal, so
                 //    it should just be a case of adding a dispatch event to remove the cache entry
                 //    whenever users are redirected back from the portal.

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/subscribe', 'SubscribeController@index')->name('subscribe');
-    Route::post('/billing', 'BillingController@index')->name('billing');
+    Route::post('/billing', 'BillingController@post')->name('billing');
     Route::get('/billing/confirm', 'BillingController@confirm')->name('billing.confirm');
     Route::get('/billing/portal', 'BillingController@portal')->name('billing.portal');
 
@@ -36,6 +36,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
             });
 
             Route::get('/dashboard','Admin\DashboardController@index')->name('admin.dashboard');
+            Route::prefix('subscription-management')->group(function() {
+                Route::get('/', 'Admin\SubscriptionController@index')->name('admin.subscription');
+                Route::get('/{package}', 'Admin\SubscriptionController@manage')->name('admin.subscription.manage');
+                Route::put('/{package}', 'Admin\SubscriptionController@update')->name('admin.subscription.update');
+            });
         });
     });
 });

@@ -4,7 +4,7 @@ namespace Rowles\Console\Commands;
 
 use Rowles\Models\Video;
 use Illuminate\Console\Command;
-use Rowles\Console\Interfaces\BaseProcessorInterface;
+use Rowles\Console\Processors\BaseProcessorInterface;
 
 class ImportVideosCommand extends Command
 {

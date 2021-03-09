@@ -4,8 +4,11 @@ namespace Rowles;
 
 use Stripe\StripeClient;
 
-class PaymentProvider implements PaymentProviderInterface
+class DefaultPaymentProvider implements PaymentProviderInterface
 {
+    /**
+     * @var StripeClient $client
+     */
     public StripeClient $client;
 
     /**
@@ -16,5 +19,13 @@ class PaymentProvider implements PaymentProviderInterface
     public function __construct($key)
     {
         $this->client = new StripeClient($key);
+    }
+
+    /**
+     * @return StripeClient
+     */
+    public function get(): StripeClient
+    {
+        return $this->client;
     }
 }
