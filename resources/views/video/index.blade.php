@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="hidden md:block hero-image relative">
-        <div class="overlay bg-dark opacity-70"></div>
-    </div>
+    <x-hero-image />
     <div class="breadcrumbs">
         {{ Breadcrumbs::render('home') }}
     </div>
@@ -12,7 +10,7 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
                 <div class="hidden md:block col-span-2">
                     @include('partials.menu.video-producers-menu')
-                    @include('partials.menu.video-categories-menu', ['classes' => 'mt-5'])
+                    @include('partials.menu.video-categories-menu', ['class' => 'mt-5'])
                     <div class="mt-10">
                         <div class="card bg-white sm:rounded-lg border shadow">
                             <div class="card-inner bg-white shadow-inner">
@@ -21,7 +19,7 @@
                                     <span class="flex flex-nowrap"><x-logo-text /></span>
                                     Community Today!
                                 </h2>
-                                <button class="default-button text-white bg-yellow-600 hover:bg-yellow-500 mt-3 py-3 sm:rounded-lg">
+                                <button class="default-button text-white bg-purple-600 hover:bg-purple-500 mt-3 py-3 sm:rounded-lg">
                                     Subscribe Now
                                 </button>
                             </div>
@@ -37,7 +35,7 @@
                             @include('partials.form.video-search-form', [
                                 'action' => route('video.search'),
                                 'theme' => 'bg-white text-gray-600',
-                                'button' => 'bg-yellow-600 hover:bg-yellow-500 text-white'
+                                'button' => 'bg-purple-600 hover:bg-purple-500 text-white'
                             ])
                         </div>
                     </div>

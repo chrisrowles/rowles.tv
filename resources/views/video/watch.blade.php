@@ -7,7 +7,7 @@
         <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
             <div class="px-6 md:px-0">
                 <h1 class="text-4xl mb-4">{{ $video->title }}</h1>
-                @include('partials.video-genre-pills', ['classes' => 'border-yellow-900 bg-yellow-900 text-white md:text-sm'])
+                @include('partials.video-genre-pills', ['classes' => 'border-purple-900 bg-purple-900 text-white md:text-sm'])
             </div>
             <div class="pt-6">
                 @include('partials.video-player', ['file' => config('app.cloudasset.video') . '/' . $video->filename])

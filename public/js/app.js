@@ -8297,7 +8297,7 @@ document.addEventListener('DOMContentLoaded', function () {
           shadeIndex = 1;
         }
 
-        textNode.classList.add('text-' + "yellow" + '-' + shades[shadeIndex]);
+        textNode.classList.add('text-' + "purple" + '-' + shades[shadeIndex]);
         textNode.innerText = text[textIndex];
         logo.appendChild(textNode);
         ++shadeIndex;

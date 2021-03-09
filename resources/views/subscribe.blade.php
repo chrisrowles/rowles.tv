@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="hidden md:block hero-image relative max-h-64">
-        <div class="overlay bg-dark opacity-70"></div>
-    </div>
+    <x-hero-image class="max-h-64"/>
     <div class="py-6 px-4 sm:px-6 lg:px-8 bg-dark text-white">
         <h1 class="text-2xl">{{ __('Billing') }}</h1>
     </div>

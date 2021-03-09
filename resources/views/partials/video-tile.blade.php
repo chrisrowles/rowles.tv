@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="mt-1">
-                @include('partials.video-genre-pills', ['classes' => 'border-gray-500 bg-gray-500 text-white'])
+                @include('partials.video-genre-pills', ['class' => 'border-gray-500 bg-gray-500 text-white'])
             </div>
         </a>
     </div>
