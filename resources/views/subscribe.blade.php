@@ -26,8 +26,8 @@
                             </label>
                             <div id="card-element"
                                  class="form-input w-full shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></div>
-                            <div id="card-errors"
-                                 class="text-red-400 text-bold mt-2 text-sm font-medium"></div>
+                            <small id="card-errors" class="text-red-500 mt-2"></small>
+
                         </div>
                         <x-button id="card-button" class="inline-block align-middle float-right mr-6 py-3">
                             {{ __('Pay Now & Subscribe') }}

@@ -24,14 +24,18 @@ Route::middleware(['auth', 'verified'])->group(function() {
         Route::get('/search', 'VideoController@search')->name('video.search');
         Route::get('/watch/{id}', 'VideoController@watch')->name('video.watch');
 
-        Route::prefix('admin/office')->middleware('administrator')->group(function() {
+        Route::prefix('account')->group(function() {
+            Route::get('/', 'AccountController@index')->name('account.index');
+        });
+
+        Route::prefix('admin')->middleware('administrator')->group(function() {
             Route::prefix('api')->group(function() {
                 Route::get('/video', 'Api\VideoController@index')->name('api.video.index');
                 Route::get('/video/{id}', 'Api\VideoController@get')->name('api.video.get');
                 Route::put('/video/{id}', 'Api\VideoController@update')->name('api.video.update');
             });
 
-            Route::get('/dashboard','Admin\DashboardController@index')->name('dashboard');
+            Route::get('/dashboard','Admin\DashboardController@index')->name('admin.dashboard');
         });
     });
 });

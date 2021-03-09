@@ -29,6 +29,6 @@ class DashboardController extends Controller
 
         $request->flash();
 
-        return view('dashboard', compact('videos', 'all'));
+        return view('admin.dashboard', compact('videos', 'all'));
     }
 }

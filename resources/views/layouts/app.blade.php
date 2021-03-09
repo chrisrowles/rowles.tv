@@ -19,11 +19,17 @@
         <script src="{{ asset('js/video.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased flex flex-col min-h-screen">
+        <!-- Include navigation -->
         @include('layouts.navigation')
         <main class="pt-16 flex-grow" id="app-container">
+            <!-- Yield main content -->
             @yield('content')
         </main>
-
+        <!-- Include footer -->
+        @include('layouts.footer')
+        <!-- Yield footer (provides the ability to override the footer completely where needed) -->
+        @yield('footer')
+        <!-- Yield extra javascript -->
         @yield('scripts')
     </body>
 </html>

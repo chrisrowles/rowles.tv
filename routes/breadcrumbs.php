@@ -20,5 +20,5 @@ Breadcrumbs::for('watch', function ($trail, Video $video) {
 // Dashboard
 Breadcrumbs::for('dashboard', function ($trail) {
     $trail->parent('home');
-    $trail->push('Dashboard', route('dashboard'));
+    $trail->push('Dashboard', route('admin.dashboard'));
 });

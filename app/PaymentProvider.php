@@ -1,53 +1,20 @@
 <?php
 
-namespace App;
+namespace Rowles;
 
-use Log;
-use Stripe\PaymentIntent;
-use Stripe\Stripe;
-use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
 
-class PaymentProvider
+class PaymentProvider implements PaymentProviderInterface
 {
-    public function __construct()
+    public StripeClient $client;
+
+    /**
+     * PaymentProvider constructor.
+     *
+     * @param $key
+     */
+    public function __construct($key)
     {
-        Stripe::setApiKey(config('stripe.secret_key'));
-    }
-
-    public function createPaymentIntent()
-    {
-        try {
-            $intent = PaymentIntent::create([
-                'amount' => 999,
-                'currency' => 'gbp',
-                'metadata' => ['integration_check' => 'accept_a_payment'],
-            ]);
-        } catch (ApiErrorException $e) {
-            Log::error($e->getMessage());
-
-            return false;
-        }
-
-        return $intent;
-    }
-
-    public function retrievePaymentIntent(int $id)
-    {
-        try {
-            return PaymentIntent::retrieve($id);
-        } catch (ApiErrorException $e) {
-            Log::error($e->getMessage());
-            return false;
-        }
-    }
-
-    public function setPaymentIntentForSession(PaymentIntent $intent)
-    {
-        session()->put('payment_intent', $intent);
-    }
-
-    public function clearPaymentIntentFromSession()
-    {
-        session()->forget('payment_intent');
+        $this->client = new StripeClient($key);
     }
 }

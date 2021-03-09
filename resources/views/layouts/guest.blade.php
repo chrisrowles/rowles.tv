@@ -17,9 +17,11 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
+        <div class="font-sans antialiased flex flex-col min-h-screen">
+            <!-- Yield main content -->
             @yield('content')
         </div>
+        <!-- Yield extra javascript -->
         @yield('scripts')
     </body>
 </html>

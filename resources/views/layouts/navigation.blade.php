@@ -8,7 +8,7 @@
                         {{ __('Videos') }}
                     </x-nav-link>
                     @if(Auth::check() && Auth::user()->role === 2)
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     @endif
@@ -31,9 +31,12 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <x-dropdown-link :href="route('account.index')">
+                                {{ __('Account Settings') }}
+                            </x-dropdown-link>
                             @if(Auth::user()->subscribed())
                                 <x-dropdown-link :href="route('billing.portal')">
-                                    {{ __('Billing Portal') }}
+                                    {{ __('Manage Subscription') }}
                                 </x-dropdown-link>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
@@ -80,7 +83,7 @@
 
                 @if(Auth::user()->role === 2)
                     <div class="mt-3 space-y-1">
-                        <x-responsive-nav-link :href="route('dashboard')">
+                        <x-responsive-nav-link :href="route('admin.dashboard')">
                             {{ __('Dashboard') }}
                         </x-responsive-nav-link>
                     </div>

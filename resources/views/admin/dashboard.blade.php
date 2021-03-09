@@ -17,7 +17,7 @@
                         </div>
                         <div class="pt-6 items-center gap-2">
                             @include('partials.form.video-search-form', [
-                                'action' => route('dashboard'),
+                                'action' => route('admin.dashboard'),
                                 'theme' => 'bg-white text-black',
                                 'button' => 'primary-button'
                             ])
@@ -49,3 +49,7 @@
 @section('scripts')
     @include('partials.refs.video-x-ref')
 @endsection
+
+@section('footer')
+@endsection
+
