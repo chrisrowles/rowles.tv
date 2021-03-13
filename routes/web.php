@@ -30,8 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
         Route::prefix('admin')->middleware('administrator')->group(function() {
             Route::prefix('video-processing')->group(function() {
-                Route::get('/', 'Admin\ProcessingController@index')->name('admin.processing');
-                Route::get('/run/{processor}', 'Admin\ProcessingController@run')->name('admin.processing.run');
+                Route::get('/dashboard', 'Admin\ProcessingController@index')->name('admin.processing');
+                Route::get('/run/{namespace}/{command}', 'Admin\ProcessingController@run')->name('admin.processing.run');
             });
 
             Route::prefix('video-management')->group(function() {

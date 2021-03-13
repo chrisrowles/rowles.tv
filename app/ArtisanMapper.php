@@ -4,17 +4,16 @@ namespace Rowles;
 
 use Artisan;
 
-class ArtisanMapper
+class ArtisanMapper implements MapperInterface
 {
     /**
      * @var array $mappings.
      */
     private static array $mappings = [
         'vid' => [
-            'metadata' => 'vid:metadata',
+            'metadata' =>  'vid:metadata',
             'thumbnail' => 'vid:thumbnail',
-            'preview' => 'vid:previews',
-            'transcode' => 'vid:transcode',
+            'transcode' => 'vid:transcode'
         ],
         'aws' => [
             's3' => [
@@ -24,27 +23,36 @@ class ArtisanMapper
     ];
 
     /**
-     * Execute command.
-     *
      * @param string $command
+     * @param array $options
      * @return string
      */
-    public function execute(string $command): string
+    public function execute(string $command, array $options = []): string
     {
-        Artisan::call($command);
+        Artisan::call($command, $options);
 
         return Artisan::output();
     }
 
     /**
-     * Get command.
-     *
      * @param string $namespace
      * @param string $command
-     * @return mixed
+     * @return string|bool
      */
     public function getCommand(string $namespace, string $command)
     {
+        if (!isset(static::$mappings[$namespace])) {
+            return false;
+        }
+
         return static::$mappings[$namespace][$command] ?? false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableCommands(): array
+    {
+        return Artisan::all();
     }
 }

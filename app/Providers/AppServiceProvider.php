@@ -5,7 +5,9 @@ namespace Rowles\Providers;
 use Auth;
 use Blade;
 use Illuminate\Support\ServiceProvider;
+use Rowles\ArtisanMapper;
 use Rowles\DefaultPaymentProvider;
+use Rowles\MapperInterface;
 use Rowles\Models\User;
 use Rowles\PaymentProviderInterface;
 
@@ -20,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PaymentProviderInterface::class, function() {
             return new DefaultPaymentProvider(config('stripe.secret_key'));
+        });
+
+        $this->app->singleton(MapperInterface::class, function() {
+            return new ArtisanMapper();
         });
     }
 
