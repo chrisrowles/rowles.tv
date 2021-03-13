@@ -29,6 +29,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
         });
 
         Route::prefix('admin')->middleware('administrator')->group(function() {
+            Route::prefix('video-processing')->group(function() {
+                Route::get('/', 'Admin\ProcessingController@index')->name('admin.processing');
+                Route::get('/run/{processor}', 'Admin\ProcessingController@run')->name('admin.processing.run');
+            });
+
             Route::prefix('video-management')->group(function() {
                 Route::get('/','Admin\VideoController@index')->name('admin.video');
                 Route::get('/{id}','Admin\VideoController@get')->name('admin.video.get');
