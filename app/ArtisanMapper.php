@@ -36,22 +36,22 @@ class ArtisanMapper implements MapperInterface
 
     /**
      * @param string $namespace
-     * @param string $command
+     * @param string $signature
      * @return string|bool
      */
-    public function getCommand(string $namespace, string $command)
+    public function map(string $namespace, string $signature)
     {
         if (!isset(static::$mappings[$namespace])) {
             return false;
         }
 
-        return static::$mappings[$namespace][$command] ?? false;
+        return static::$mappings[$namespace][$signature] ?? false;
     }
 
     /**
      * @return array
      */
-    public function getAvailableCommands(): array
+    public function getAvailable(): array
     {
         return Artisan::all();
     }

@@ -13,13 +13,13 @@ interface MapperInterface
 
     /**
      * @param string $namespace
-     * @param string $command
+     * @param string $signature
      * @return mixed
      */
-    public function getCommand(string $namespace, string $command);
+    public function map(string $namespace, string $signature);
 
     /**
      * @return array
      */
-    public function getAvailableCommands() : array;
+    public function getAvailable() : array;
 }
