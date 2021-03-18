@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-LABEL maintainer="Taylor Otwell"
-
 ARG WWWGROUP
 
 WORKDIR /var/www/html
@@ -36,6 +34,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y yarn \
     && apt-get install -y mysql-client \
+    && apt-get install -y ffmpeg \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
